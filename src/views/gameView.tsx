@@ -1,9 +1,19 @@
 import { useGameState } from "../composables/useGameState"
+import StartScreen from "./startScreen";
 
 export default function GameView() {
-  const { gameState } = useGameState(); 
+  const { gameState } = useGameState();
+  const { started } = gameState;
   
   return (
-    <div>Hello | { JSON.stringify(gameState) }</div>
+    <>
+      {
+        started ? (
+          <div>Hi</div>
+        ) : (
+          <StartScreen />
+        )
+      }
+    </>
   )
 };

@@ -7,7 +7,6 @@ function App() {
 
   return (
     <GameProvider>
-      <div>Hi</div>
       <GameView />
     </GameProvider>
   )

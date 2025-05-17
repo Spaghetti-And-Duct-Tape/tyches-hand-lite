@@ -10,6 +10,7 @@ type GameStateType = {
     | "player-won" 
     | "player-lost" 
     | "intermission"; 
+  started: boolean;
   gameOver: boolean;
   round: number;
   handCount: number;
@@ -52,6 +53,7 @@ type VisibilityType = {
 
 const initialGameState: GameStateType = {
   phase: "intro",
+  started: false,
   gameOver: false,
   round: 0,
   handCount: 0,
