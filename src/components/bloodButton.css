@@ -1,0 +1,42 @@
+:root {
+  --blood-dark: #6A0D0D;
+  --blood-base: #AA2A2A;
+  --blood-highlight: #FF0000;
+  --blood-border: #550000;
+  --blood-text: #F5E6E6;
+  --gold-hightlight: #F2A900;
+  --gold-base: #9B4D00;
+}
+
+.blood-button {
+  /* color & font */
+  color: var(--blood-text);
+  font-size: 2vw;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  padding: 0.75em 1.5em;
+  border: 0.125rem solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  background: linear-gradient(145deg, var(--blood-base), var(--blood-dark));
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+
+  transition: all 0.3s ease;
+}
+
+.blood-button:hover {
+  background: linear-gradient(145deg, var(--blood-dark), var(--blood-base));
+  border: 0.125rem solid transparent;
+  box-shadow:
+    inset 0 0 6px rgba(255, 0, 0, 0.6),
+    0 3px 4px rgba(0, 0, 0, 0.8);
+}
+
+.blood-button:active {
+  background: linear-gradient(145deg, var(--blood-dark), var(--blood-base));
+  border: 0.125rem solid transparent;
+  box-shadow:
+    inset 0 0 6px rgba(255, 0, 0, 0.6),
+    0 3px 4px rgba(0, 0, 0, 0.8);
+}

@@ -10,6 +10,7 @@ type GameStateType = {
     | "player-won" 
     | "player-lost" 
     | "intermission"; 
+  started: boolean;
   gameOver: boolean;
   round: number;
   handCount: number;
@@ -29,18 +30,7 @@ type GameStateType = {
 };
 
 type GameActionType = 
-  | { type: "START_ROUND", payload: {
-      phase: string,
-      round: number,
-      handCount: number,
-      playerMaxHealth: number,
-      daimonHealth: number,
-      daimonMaxHealth: number,
-      wager: number,
-      playerHand: CardType[],
-      daimonHand: CardType[],
-      deck: CardType[],
-    }}
+  | { type: "START_GAME" }
   | { type: "SET_WAGER", payload: { wager: number } };
 
 type VisibilityType = {
@@ -52,6 +42,7 @@ type VisibilityType = {
 
 const initialGameState: GameStateType = {
   phase: "intro",
+  started: false,
   gameOver: false,
   round: 0,
   handCount: 0,
@@ -74,16 +65,12 @@ const initialGameState: GameStateType = {
 
 function gameReducer(state: GameStateType, action: GameActionType): GameStateType {
   switch(action.type) {
-    case "START_ROUND":
+    case "START_GAME":
       return { 
         ...state,
-        phase: "wager",
+        phase: "intro",
+        started: true,
         round: state.round + 1,
-        handCount: state.handCount + 1,
-        playerMaxHealth: action.payload.playerMaxHealth,
-        daimonHealth: action.payload.daimonHealth,
-        daimonMaxHealth: action.payload.daimonMaxHealth,
-        wager: action.payload.wager,
       };
     default:
       return state;
