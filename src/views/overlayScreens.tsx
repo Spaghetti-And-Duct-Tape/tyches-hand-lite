@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGameState } from "../composables/useGameState";
-import StartScreen from "../components/startScreen";
-import BloodButton from "../components/bloodButton";
+import StartScreen from "./startScreen";
+import BloodButton from "../components/bloodButton/bloodButton";
 
 export default function OverlayScreens() {
   const { gameDispatch } = useGameState();
@@ -16,11 +16,23 @@ export default function OverlayScreens() {
   }, []);
 
   return(
-    <div className="overlay-screen">
+    <div 
+      className="overlay-screen"
+      style={{ 
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "center",
+        
+      }}
+    >
       <StartScreen />
         <div 
-          className="start-button-container"
-          style={{ opacity: playButton ? "1" : "0" }}
+          className="start-button-container transition-opacity"
+          style={{
+            opacity: playButton ? "1" : "0" ,
+            zIndex: "1"
+          }}
         >
           <BloodButton
             disabled={ !playButton }

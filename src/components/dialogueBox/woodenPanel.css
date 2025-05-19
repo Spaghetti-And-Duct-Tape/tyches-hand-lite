@@ -1,0 +1,51 @@
+.wooden-panel-container .wooden-layer {
+  background: linear-gradient(
+    135deg,
+    #3a2017 0%,
+    #362010 25%,
+    #3d2119 50%,
+    #331e17 75%,
+    #3b261d 100%
+  );
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: 
+    inset 0 0 5px rgba(0, 0, 0, 0.5), 
+    0 2px 4px rgba(0, 0, 0, 0.4);
+}
+  
+.dark-seam {
+  background: linear-gradient(
+    to bottom right,
+    #1a0f09,
+    #100804
+  );
+  padding: 1px;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 6px rgba(0, 0, 0, 0.7),
+    0 0 3px rgba(255, 255, 255, 0.05);
+}
+
+.wooden-panel-container > .wooden-layer {
+  box-shadow: 
+    inset 0 0 12px rgba(0, 0, 0, 0.6),
+    0 4px 8px rgba(0, 0, 0, 0.6);;
+}
+
+.wooden-panel-container .dialogue-content {
+  background-color: rgba(30, 30, 30, 0.85);
+  border-radius: 0.75rem;
+  font-size: clamp(14px, 2.5dvw, 20px);
+  background: #0A0608;
+  color: #A88E72;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.dialogue-content .dialogue-line {
+  margin: 0;
+  padding: 0.5rem;
+  font-size: min(2.5vw, calc(2.5vh * 16 / 9));
+  opacity: 0;
+  animation: fade-in-soft-descent 1s ease-in-out forwards;
+}

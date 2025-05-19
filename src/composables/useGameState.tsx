@@ -1,7 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
 
-type GameStateType = {
-  phase: 
+type phaseType = 
     | "intro" 
     | "wager" 
     | "player-turn" 
@@ -9,7 +8,10 @@ type GameStateType = {
     | "resolution" 
     | "player-won" 
     | "player-lost" 
-    | "intermission"; 
+    | "intermission";
+
+interface GameStateType {
+  phase: phaseType
   started: boolean;
   gameOver: boolean;
   round: number;
@@ -29,16 +31,27 @@ type GameStateType = {
   visibility: VisibilityType
 };
 
-type GameActionType = 
-  | { type: "START_GAME" }
-  | { type: "SET_WAGER", payload: { wager: number } };
-
 type VisibilityType = {
   daimon: boolean;
   table: boolean;
   healthBars: boolean;
   dialogueBox: boolean;
 };
+
+type GameActionType = 
+  | { type: "START_GAME" }
+  | { type: "SET_PHASE", 
+      payload: {
+        phase: phaseType
+    }}
+  | { type: "SET_VISIBILITY", 
+      payload: {
+        visibility: VisibilityType
+    }}
+  | { type: "SET_WAGER",
+    payload: {
+      wager: number
+    }};
 
 const initialGameState: GameStateType = {
   phase: "intro",
@@ -72,6 +85,28 @@ function gameReducer(state: GameStateType, action: GameActionType): GameStateTyp
         started: true,
         round: state.round + 1,
       };
+    case "SET_PHASE":
+      return {
+        ...state,
+        phase: action.payload.phase
+      };
+    case "SET_VISIBILITY":
+      return {
+        ...state,
+        visibility: {
+          ...state.visibility,
+          ...action.payload
+        }
+      };
+    case "SET_WAGER":
+      return {
+        ...state,
+        phase: "player-turn",
+        handCount: state.handCount + 1,
+        playerHealth: state.playerHealth - action.payload.wager,
+        daimonHealth: state.daimonHealth - action.payload.wager,
+        wager: 2 * action.payload.wager
+      }
     default:
       return state;
   };

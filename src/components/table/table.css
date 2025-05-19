@@ -1,0 +1,72 @@
+.table-container {
+  mask-image: radial-gradient(
+    ellipse 70% 150% at center bottom,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 150% at center bottom,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.table-surface {
+  flex-grow: 1;
+  height: 45%;
+  background: 
+    repeating-linear-gradient(
+      47deg,
+      rgba(255, 255, 255, 0.01) 0px,
+      rgba(255, 255, 255, 0.01) 2px,
+      transparent 2px,
+      transparent 4px
+    ),
+    linear-gradient(
+      to top,
+      #134c32 0%,
+      #0d3322 40%,
+      #020d08 85%,
+      black 100%
+    );
+  background-blend-mode: overlay;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(1.2) contrast(1.2);
+  mask-image: radial-gradient(
+    ellipse 70% 150% at center bottom,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 0.8) 40%,
+    rgba(0, 0, 0, 0.4) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 150% at center bottom,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 0.8) 40%,
+    rgba(0, 0, 0, 0.4) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  box-shadow: inset 0 -10px 10px -10px rgba(0, 0, 0, 0.7);
+}
+
+.table-edge {
+  height: 200px;
+  background-repeat: repeat;
+  box-shadow:
+    inset 0 2px 4px rgba(255, 255, 255, 0.05),
+    0 -2px 6px rgba(0, 0, 0, 0.6),
+    0 4px 8px rgba(0, 0, 0, 0.5);
+  
+  mask-image: radial-gradient(
+    ellipse at center top,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse at center top,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
