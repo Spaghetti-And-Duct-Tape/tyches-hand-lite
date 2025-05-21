@@ -1,11 +1,21 @@
 import { useGameState } from "../composables/useGameState";
 import OverlayScreens from "./overlayScreens";
 import GameBoard from "./gameBoard";
+import { useEffect } from "react";
 
 export default function GameView() {
-  const { gameState } = useGameState();
+  const { gameState, gameDispatch } = useGameState();
+  const { playerHealth } = gameState;
   const { started } = gameState;
   
+  useEffect(() => {
+    if (playerHealth <= 0) endGame();
+  }, [playerHealth])
+
+  function endGame() {
+    gameDispatch({ type: "END_GAME" })
+  };
+
   return (
     <div 
       className="game-view"
@@ -19,7 +29,7 @@ export default function GameView() {
     >
       {
         started ? (
-          <GameBoard />
+          <Game />
         ) : (
           <OverlayScreens />
         )
@@ -27,3 +37,12 @@ export default function GameView() {
     </div>
   )
 };
+
+
+function Game() {
+  const { gameState } = useGameState();
+  
+  return(
+    <GameBoard />
+  )
+}

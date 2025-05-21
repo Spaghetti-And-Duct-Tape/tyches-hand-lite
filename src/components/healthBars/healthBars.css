@@ -1,0 +1,104 @@
+.healthbar-content .heading-name {
+  background: #0A0608;
+  color: #A88E72;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.healthbar-content > .wooden-panel-container > .wooden-layer {
+  width: 15vw;
+  min-width: 150px;
+}
+
+h2 {
+  font-size: min(2.5vw, calc(2.5vh * 16 / 9));
+  text-shadow: 0 0 4px rgba(0,0,0,0.4);
+}
+
+.healthbar-container .dark-seam > .wooden-layer {
+  padding: 0;
+}
+
+.healthbar-inner-layer {
+  background-color: #1C1B1C;
+}
+
+.healthbar-fill {
+  background: radial-gradient(
+    ellipse at 50% 25%,
+    #1e2a4a 0%,
+    #141f35 40%,
+    #0d1324 85%,
+    #050a12 100%
+  );
+  box-shadow:
+    inset 0 1px 3px rgba(255, 246, 243, 0.3),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.5),
+    0 0 6px rgba(180, 30, 30, 0.15);
+  transition: width 1.7s ease-in-out, background 1.7s ease;
+}
+
+.player-health {
+  background: radial-gradient(
+    ellipse at 50% 25%,
+    #7c1d10 0%,
+    #4a1210 40%,
+    #2a0a08 85%,
+    #120504 100%
+  );
+}
+
+.healthbar-text { 
+  color: #A88E72;
+  top: 50%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 0 0.3125rem #000;
+}
+
+.orb {
+  width: 10vw;
+  min-width: 50px;
+  max-width: 75px;
+  height: 10vw;
+  min-height: 50px;
+  max-height: 75px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ddd;
+  overflow: hidden;  
+  color: #A88E72;
+  z-index: 1;
+}
+
+.orb .shine {
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  width: 30%;
+  height: 30%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(5px);
+  transition: ease-in-out;
+  z-index: 2;
+}
+
+.orb .shine .wager-text {
+  text-shadow: 0 0 4px rgba(0,0,0,0.4);
+  font-size: 15px;
+}
+
+.blood-fill {
+  position: absolute;
+  width: 500%;
+  height: 500%;
+  background: #5A0B0B;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 40%;
+}
+
+.animate-fill {
+  animation: fill 1.7s ease-in-out forwards;
+}

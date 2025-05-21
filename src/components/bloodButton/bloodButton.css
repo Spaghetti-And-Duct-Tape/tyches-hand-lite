@@ -1,5 +1,5 @@
 :root {
-  --blood-dark: #6A0D0D;
+  --blood-dark: #5A0B0B;
   --blood-base: #AA2A2A;
   --blood-highlight: #FF0000;
   --blood-border: #550000;
@@ -11,19 +11,19 @@
 .blood-button {
   color: var(--blood-text);
   text-transform: uppercase;
-  font-size: min(2vw, calc(2vh * 16 / 9));
+  font-size: min(1.3vw, calc(1.3vh * 16 / 9));;
 
   border: 0.125rem solid transparent;
   border-radius: 0.5rem;
   cursor: pointer;
-  background: linear-gradient(145deg, var(--blood-base), var(--blood-dark));
+  background: linear-gradient(25deg, var(--blood-base), var(--blood-dark) 70%);
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 
   transition: all 0.3s ease;
 }
 
-.blood-button:hover {
-  background: linear-gradient(145deg, var(--blood-dark), var(--blood-base));
+.blood-button:hover, .blood-button:active {
+  background: linear-gradient(25deg, var(--blood-base), var(--blood-dark) 50%);
   border: 0.125rem solid transparent;
   box-shadow:
     inset 0 0 6px rgba(255, 0, 0, 0.6),

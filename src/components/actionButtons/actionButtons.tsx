@@ -1,47 +1,53 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useGameState } from "../../composables/useGameState";
 import BloodButton from "../bloodButton/bloodButton";
-import { calculateWager } from "../../utils/gameCalculations";
+import usePlayerActions from "../../composables/usePlayerActions";
+import "./actionButtons.css";
 
 export default function ActionButton() {
   const { gameState, gameDispatch } = useGameState();
-  const { phase } = gameState;
+  const { phase, playerHand, handCount } = gameState;
   const [buttonMap, setButtonMap] = useState<string[]>([]);
-  const [index, setIndex] = useState(0);
+  const { startWager, playerHits, daimonResolves, playerSurrenders, player2x, availablePlayerActions } = usePlayerActions();
+  const buttonRef = useRef(false);
 
   useEffect(() => {
-    if (phase === "intro") return;
-    if (phase === "wager") return setButtonMap(["Wager"]);
-  }, [phase]);
+    buttonRef.current = false;
+
+    switch(phase) {
+      case "wager":
+        return setButtonMap(["Wager"]);
+      case "player-turn":
+        return setButtonMap(availablePlayerActions());
+      default:
+        setButtonMap([]);
+    }; 
+  }, [phase, playerHand]);
 
   if (buttonMap.length === 0) return;
 
-  function startWager() {
-    const { playerHealth, daimonHealth, wager } = gameState
-    const wage = calculateWager(index, playerHealth);
-    const deductedPlayer = playerHealth - wage;
-    const deductedDaimon = daimonHealth - wage;
+  function handleButtonClick(name: string) {
+    if (buttonRef.current) return;
+    buttonRef.current = true;
 
-    if (deductedPlayer <= 0) return console.log("player lost");
-    if (deductedDaimon <= 0) return console.log("daimon lost");
-
-    gameDispatch({ 
-      type: "SET_WAGER", 
-      payload: 
-      { 
-        wager: wage
-    }})
-  };
-
-  console.log(gameState);
+    const fn = buttonActionsMap[name];
+    if (fn) fn();
+  }
+  const buttonActionsMap = {
+    "Wager": () => startWager(),
+    "Hit": () => playerHits(),
+    "Stand": () => daimonResolves(),
+    "Surr": () => playerSurrenders(),
+    "2x": () => player2x(),
+  }
 
   return (
     <div
       className="action-buttons-container"
       style={{
         position: "absolute",
-        top: "3%",
-        right: "5%",
+        bottom: "5%",
+        right: "2%",
         zIndex: "1",
       }}
     >
@@ -52,14 +58,15 @@ export default function ActionButton() {
         return (
           <div 
             className="draw-button-animation"
+            key={ button }
             style={{
               margin: "5px",
-              transform: `translateY( ${ -50 * (index + 1) }px)`,
-              animationDelay: `${ inverseIndex * 0.25 }s` 
+              transform: `translateY( ${ 50 * (index + 1) }px)`,
+              animationDelay: `${ inverseIndex * 0.1 }s` 
             }}
           >
             <BloodButton
-              action={ startWager }
+              action={ () => handleButtonClick(button) }
             >
               { button }
             </BloodButton>

@@ -1,4 +1,3 @@
-import { useGameState } from "../../composables/useGameState";
 import WoodenPanel from "./woodenPanels";
 
 export default function DialogueBox({

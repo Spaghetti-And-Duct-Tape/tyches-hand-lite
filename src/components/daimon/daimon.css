@@ -121,6 +121,11 @@
   animation: openLid 1.25s ease-in-out forwards;
 }
 
+.close-eyelid #eye::before {
+  transform: rotate(-45deg) translate(0, 0);
+  animation: closeLid 1.25s ease-in-out forwards;
+}
+
 .blinking {
   animation: blink 1s;
 }
@@ -135,6 +140,15 @@
   }
   100% {
     transform: rotate(-45deg) translate(-0%, -100%);
+  }
+}
+
+@keyframes closeLid {
+  0% {
+    transform: rotate(-45deg) translate(-0%, -100%);
+  }
+  100% {
+    transform: rotate(-45deg) translate(0, 0);
   }
 }
 

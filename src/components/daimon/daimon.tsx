@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useGameState } from "../../composables/useGameState";
 import "./daimon.css";
 import { useAnimationState } from "../../composables/useAnimationState";
@@ -7,20 +7,25 @@ export default function Daimon() {
   const { gameState } = useGameState();
   const { animationState, setAnimation } = useAnimationState();
   const { visibility } = gameState;
+  const blinkTimer = useRef<number>();
 
   useEffect(() => {
-    if (!visibility.daimon) return;
-    setAnimation("daimon", "open-eyelid", 10000)
+    if (visibility.daimon) setAnimation("daimon", "open-eyelid", 10000)
   }, [visibility.daimon]);
 
    //Blinks randomly if in an idle animation
   useEffect(() => {
-    if (animationState.daimon !== "idle") return;
-    const randomDelay: number = Math.random() * 5000 + 10000
-    console.log(randomDelay);
-    
-    setAnimation("daimon", "blinking", randomDelay);
-  }, [animationState.daimon]);
+    window.clearTimeout(blinkTimer.current);
+
+    if (visibility.daimon && animationState.daimon === "idle") {
+      const delay = Math.random() * 5000 + 10000;
+      blinkTimer.current = window.setTimeout(() => {
+        setAnimation("daimon", "blinking", 2000);
+      }, delay);
+    }
+
+    return () => window.clearTimeout(blinkTimer.current);
+  }, [visibility.daimon, animationState.daimon]);
   
   return (
     <div

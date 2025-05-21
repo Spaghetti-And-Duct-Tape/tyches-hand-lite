@@ -1,0 +1,218 @@
+.daimon-card-stack, .player-card-stack {
+  height: 100%;
+  width: fit-content;
+  position: relative;
+  transition: width 10s ease-in-out;
+}
+
+.daimon-card-stack .overlap-cards, 
+.player-card-stack .overlap-cards {
+  position: relative;
+  margin-left: -7rem;
+  transition: z-index 0.3s ease;
+  transform: translateX(3.125rem);
+  opacity: 0;
+  animation: stack-animation 0.3s ease forwards;
+}
+
+.sway .card-container:nth-child(odd) {
+  animation: sway 5s ease-in-out infinite;
+}
+
+.sway .card-container:nth-child(even) {
+  animation: sway 5s ease-in-out infinite;
+  animation-delay: 2.5s;
+}
+
+.discard .card-container {
+  animation: discard 0.5s ease forwards;
+}
+
+.daimon-card-stack .overlap-cards:first-child, 
+.player-card-stack .overlap-cards:first-child {
+  margin-left: 0;
+}
+
+.daimon-card-stack .overlap-cards:hover, 
+.player-card-stack .overlap-cards:hover {
+  z-index: 1;
+}
+
+.perspective-card {
+  transform: perspective(40px) rotateX(5deg) scale(0.8);
+}
+
+.daimon-card-stack .perspective-card {
+  transform: perspective(35px) rotateX(5deg) scale(0.5);
+}
+
+.card-container {
+  width: 9.375rem;
+  height: 13.75rem;
+  border-radius: 0.75rem;
+  perspective: 62.5rem;
+  cursor: pointer;
+}
+
+.card-container.black .card-suit,
+.card-container.black .card-rank,
+.card-container.black .card-value {
+  color: #000;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease-in-out;
+  background: linear-gradient(135deg, #FFFFFF, #EAEAEA);
+  border: 0.125rem solid #000;
+  border-radius: 15px;
+}
+
+.card-inner:hover {
+  transform: translateY(-1.25rem) scale(1.1);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+}
+
+.card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 0.5rem;
+}
+
+.card-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Back of Card */
+.card-back {
+  transform: rotateY(180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-header .card-suit, .card-footer .card-suit {
+  font-size: 2rem;
+}
+
+.card-header, .card-footer {
+  width: 100%;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #9C1C1C;
+}
+
+.card-content {
+  font-size: 7rem;
+  color: #9C1C1C;
+}
+
+/* Face Down Pattern */
+.face-down {
+  width: 95%;
+  height: 95%;
+  border-radius: 10px;
+  background: repeating-linear-gradient(
+    45deg,
+    #5A0B0B,
+    #9C1C1C 6px,
+    #5A0B0B 5px,
+    #9C1C1C 9px
+  );
+}
+
+.winner-counter{
+animation: 
+  shake 0.3s ease-in-out,
+  highlight-pulse 0.7s ease-in-out 0.3s;
+}
+
+.loser-counter {
+  animation: 
+    shake 0.3s ease-in-out,
+    shrink-fade 0.7s ease-in-out 0.3s;
+}
+
+@media (max-width: 1140px) {
+  .daimon-card-stack .overlap-cards, .player-card-stack .overlap-cards {
+    margin-left: -5.25rem;
+  }
+
+  .card-container {
+    width: 7.0312rem;
+    height: 10.3125rem;
+  }
+
+  .card-header .card-suit, .card-footer .card-suit {
+    font-size: 1.5rem;
+  }
+
+  .card-header, .card-footer {
+    font-size: 1.5rem;
+  }
+  
+  .card-content {
+    font-size: 5.25rem;
+  }
+}
+
+@media (max-width: 950px) {
+  .daimon-card-stack .overlap-cards, .player-card-stack .overlap-cards {
+    margin-left: -3.5rem;
+  }
+
+  .card-container {
+    width: 4.6875rem;
+    height: 6.875rem;
+  }
+
+  .card-header .card-suit, .card-footer .card-suit {
+    font-size: 1.5rem;
+  }
+
+  .card-header, .card-footer {
+    font-size: 1.5rem;
+  }
+  
+  .card-content {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .daimon-card-stack .overlap-cards, .player-card-stack .overlap-cards {
+    margin-left: -2.33rem;
+  }
+
+  .card-container {
+    width: 3.125rem;
+    height: 4.583rem;
+  }
+
+  .card-inner {
+    border-radius: 7.5px;
+  }
+  .card-header .card-suit, .card-footer .card-suit {
+    font-size: 0.75rem;
+  }
+
+  .card-header, .card-footer {
+    font-size: 0.75rem;
+  }
+  
+  .card-content {
+    font-size: 1.75rem;
+  }
+}

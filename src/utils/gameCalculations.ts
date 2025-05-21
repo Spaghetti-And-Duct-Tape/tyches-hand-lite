@@ -14,3 +14,11 @@ export function calculateWager(handsPlayed: number, playerHealth: number) {
   //Prevents wager from going over player health
   return Math.min(maxWager, totalWager);
 };
+
+export function calculateDaimonHealth(round: number): number {
+  const baseDaimonHealth: number = 2500;
+  const scalingFactor: number = 1.155;
+  
+  if (round <= 0) return 2500;
+  return Math.round(baseDaimonHealth * (scalingFactor ** (round)));
+}

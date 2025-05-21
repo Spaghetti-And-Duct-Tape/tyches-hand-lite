@@ -34,7 +34,6 @@
 }
 
 .wooden-panel-container .dialogue-content {
-  background-color: rgba(30, 30, 30, 0.85);
   border-radius: 0.75rem;
   font-size: clamp(14px, 2.5dvw, 20px);
   background: #0A0608;

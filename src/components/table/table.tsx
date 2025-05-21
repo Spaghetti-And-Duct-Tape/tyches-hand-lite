@@ -1,4 +1,5 @@
 import { useGameState } from "../../composables/useGameState";
+import HandleCards from "../card/handleCards";
 import WoodenPanel from "../dialogueBox/woodenPanels";
 import "./table.css";
 
@@ -28,13 +29,17 @@ export default function Table() {
         <div 
           className="table-surface"
           style={{
-            flexGrow: "1",
+            position: "relative",
             display: "flex",
             flexDirection: "column",
-            position: "relative",
-            height: "min(calc((100vw * 9 / 16) - 150px), (100vh - 200px)",
+            flexGrow: "1",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "min(calc((65vw * 9 / 16)), (65vh)",
+            paddingBottom: "2vw"
           }}
         >
+          <HandleCards />
         </div>
         <div className="table-edge">
           <WoodenPanel>

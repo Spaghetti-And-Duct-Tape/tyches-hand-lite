@@ -1,7 +1,8 @@
 import { createContext, useContext, useState } from "react";
 
 type CommonAnimationTypes = "idle" | "injured" | "healed";
-type DaimonOnlyAnimations = "open-eyelid" | "blinking" | "null";
+type DaimonOnlyAnimations = "open-eyelid" | "close-eyelid" | "blinking" | "null";
+type CardOnlyAnimations = "idle" | "sway" | "discard"
 
 type DaimonAnimationTypes = CommonAnimationTypes | DaimonOnlyAnimations;
 type PlayerAnimationTypes = CommonAnimationTypes;
@@ -9,6 +10,7 @@ type PlayerAnimationTypes = CommonAnimationTypes;
 interface AnimationStateType {
   daimon: DaimonAnimationTypes;
   player: PlayerAnimationTypes;
+  cards: CardOnlyAnimations;
 };
 
 interface AnimationContextType {
@@ -24,7 +26,8 @@ const AnimationStateContext = createContext<AnimationContextType | undefined>(un
 
 const initialAnimationState: AnimationStateType = {
   daimon: "null",
-  player: "idle"
+  player: "idle",
+  cards: "idle",
 };
 
 function AnimationProvider({ children } : { children: React.ReactNode }) {

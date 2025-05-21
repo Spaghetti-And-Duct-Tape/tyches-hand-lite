@@ -1,18 +1,15 @@
 import { daimonDailogue1 } from "./daimon1";
+import { daimonDialogue2 } from "./daimon2";
 
 export type dialogueType = {
-  intro: string[];
-  hand?: { [handIndex: number]: string[] };
-  end: string[];
+  introDialogue?: { [handIndex: number]: string[] };
+  handDialogue?: { [handIndex: number]: string[] };
+  endDialogue?: { [handIndex: number]: string[] };
 }
 
 interface Daimons {
   [key: number]: {
     id: number;
-    name: string;
-    rune: string | null;
-    description: string;
-    effectType: string | null;
     dialogue: dialogueType;
   }
 }
@@ -20,10 +17,10 @@ interface Daimons {
 export const daimons: Daimons = {
   1: {
     id: 1,
-    name: "The Draw",
-    rune: null,
-    description: "",
-    effectType: null,
     dialogue: daimonDailogue1,
   },
+  2: {
+    id: 2,
+    dialogue: daimonDialogue2,
+  }
 };

@@ -1,16 +1,19 @@
 import ActionButton from "../components/actionButtons/actionButtons";
 import Daimon from "../components/daimon/daimon";
-import IntroManager from "../components/dialogueBox/introManager";
+import DialogueManager from "../components/dialogueBox/dialogueManager";
+import HealthBars from "../components/healthBars/healthBars";
 import Table from "../components/table/table";
+import { useAnimationState } from "../composables/useAnimationState";
+import "./gameBoard.css";
 
 export default function GameBoard() {
-
+  const { animationState } = useAnimationState();
   return(
     <div 
-      className="game-board"
+      className={`game-board player-${ animationState.player }`}
       style={{
         width: "100%",
-        padding: "10px",
+        height: "100%",
         position: "relative",
         display: "flex",
         flexDirection: "column",
@@ -18,7 +21,8 @@ export default function GameBoard() {
       }}
     >
       <ActionButton />
-      <IntroManager />
+      <HealthBars />
+      <DialogueManager />
       <Daimon />
       <Table />
     </div>

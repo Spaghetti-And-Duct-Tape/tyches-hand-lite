@@ -1,0 +1,42 @@
+import { useAnimationState } from "../../composables/useAnimationState";
+import type { CardType } from "../../utils/cards";
+import Card from "./card";
+
+export default function PerspectiveCards({
+  hand,
+  owner
+} : {
+  hand: CardType[];
+  owner: string;
+}) {
+  const { animationState } = useAnimationState();
+  
+  return(
+    <div
+      className={ `${ owner }-card-stack ${ animationState.cards }` }
+      style={{
+        display: "flex",
+        justifyContent: "center"
+      }}
+    >
+      { hand.length > 0 &&
+        hand.map((card, index) => (
+          <div 
+            key={ owner === "player" ? index : index + 10 }
+            className={ `overlap-cards` }
+            style={{ width: "fit-content" }}
+          >
+            <div
+              className="perspective-card"
+            >
+              <Card
+                card={ card }
+                isFlipped={ card.flipped }
+              />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  )
+};

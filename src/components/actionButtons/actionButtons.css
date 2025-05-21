@@ -1,0 +1,5 @@
+.draw-button-animation .blood-button {
+  width: 10vw;
+  font-size: min(1.3vw, calc(1.3vh * 16 / 9));;
+
+}
