@@ -3,12 +3,13 @@ import { useGameState } from "../../composables/useGameState"
 import { cardTotal, wait } from "../../utils/utils";
 import PerspectiveCards from "./perspectiveCards";
 import NumberTicker from "../healthBars/numberTicker";
-import type { CardType } from "../../utils/cards";
+import { emptyCard, type CardType } from "../../utils/cards";
 import usePlayerActions from "../../composables/usePlayerActions";
 
 export default function HandleCards() {
   const { gameState, gameDispatch } = useGameState();
   const { phase, playerHand, daimonHand } = gameState;
+  const handleDaimonHand = daimonHand.length === 1 ? [...daimonHand, emptyCard] : daimonHand;
   const animationDelay = 300;
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export default function HandleCards() {
         }}
       >
         <PerspectiveCards
-          hand={ daimonHand }
+          hand={ handleDaimonHand }
           owner="daimon"
         />
         <CardCounter
@@ -108,7 +109,7 @@ function CardCounter({
       }}
     >
       <NumberTicker
-        duration={ 800 * hand.length }
+        duration={ 500 * hand.length }
         replacement={ total }
         value={ value }
         setValue={ setValue }

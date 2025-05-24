@@ -1,6 +1,12 @@
+.game-over {
+  color: red;  
+  animation: pulse-glow 1.6s ease-in-out infinite;
+  opacity: 0.5;
+}
+
 .player-injured, .player-healed {
   position: relative;
-  z-index: 0;
+  z-index: 999;
 }
 
 .player-injured::before, .player-healed::before {
@@ -11,7 +17,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: -1;
+  z-index: 999;
     
   background: radial-gradient(
     ellipse at center,
@@ -34,4 +40,22 @@
 
 .player-injured {
   animation: quiver 0.5s ease infinite;
+}
+
+.intermission-content {
+  margin: 10px;
+  opacity: 0;
+  animation: fade-in-soft-descent 1s ease-in-out forwards;
+}
+
+.intermission-content .wooden-panel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100% !important;
+}
+
+.inner-content-card-description .wooden-panel-container {
+  width: 100%;
 }

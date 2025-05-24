@@ -1,11 +1,11 @@
 .table-container {
   mask-image: radial-gradient(
-    ellipse 70% 150% at center bottom,
+    ellipse 50% 150% at center bottom,
     rgba(0, 0, 0, 1) 50%,
     rgba(0, 0, 0, 1) 100%
   );
   -webkit-mask-image: radial-gradient(
-    ellipse 70% 150% at center bottom,
+    ellipse 50% 150% at center bottom,
     rgba(0, 0, 0, 1) 50%,
     rgba(0, 0, 0, 0) 100%
   );

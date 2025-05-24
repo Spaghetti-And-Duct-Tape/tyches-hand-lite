@@ -11,7 +11,6 @@ export default function StartScreen() {
           display: "flex",
           justifyContent: "center",
           animation: "fade-in-soft-descent 1s ease-in-out forwards"
-
         }}
       >
         <img

@@ -24,7 +24,10 @@ export default function PerspectiveCards({
           <div 
             key={ owner === "player" ? index : index + 10 }
             className={ `overlap-cards` }
-            style={{ width: "fit-content" }}
+            style={{ 
+              width: "fit-content",
+              animationDelay: card.id === 999 ? "0.3s" : "", 
+            }}
           >
             <div
               className="perspective-card"

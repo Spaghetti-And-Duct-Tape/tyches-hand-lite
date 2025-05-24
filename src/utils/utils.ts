@@ -1,4 +1,4 @@
-import type { CardType } from "./cards";
+import { tutorialDeck, type CardType } from "./cards";
 
 export function wait(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -10,7 +10,7 @@ export function cardTotal(cards: CardType[]) {
 
   cards.forEach(card => {
     const { rank } = card;
-    if (rank === "A") {
+    if (rank === "Ace") {
       aces++
     }
     else if (isNaN(rank)) {
