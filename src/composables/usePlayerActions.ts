@@ -1,3 +1,4 @@
+import type { CardType } from "../utils/cards";
 import { calculateWager } from "../utils/gameCalculations"
 import { cardTotal, wait } from "../utils/utils";
 import { useAnimationState } from "./useAnimationState";
@@ -98,32 +99,35 @@ export default function usePlayerActions() {
     gameDispatch({ type: "SET_PHASE", payload: { phase: "resolution"}});
   }
 
+  function projectedSum(startingCard: CardType, n: number) {
+    const extra = deck.slice(-n);
+    const hand = [startingCard, ...extra];
+    gameDispatch({ type: "DRAW_DAIMON_CARD" });
+    return cardTotal(hand).sum;
+  };
+
   async function daimonResolves() {
-    const nextHand = [daimonHand[0]]
-    let count = 0;
-
-
-    while (cardTotal(nextHand).sum < 17) {
-      nextHand.push(deck[count]);
-      count++;
-    };
-
-    while (count > 0) {
-      gameDispatch({ type: "DRAW_DAIMON_CARD" });
+    const startingHand = daimonHand[0];
+    let drawCount = 1;
+    
+    while (projectedSum(startingHand, drawCount) < 17) {
+      drawCount ++;
       await wait(300);
-      count--;
     };
-
+    
     await wait(300);
     gameDispatch({ type: "SET_PHASE", payload: { phase: "resolution"}});
   };
 
   async function resolveHand() {
-    const maxCardLength = Math.max(playerHand.length, daimonHand.length);
-    setAnimation("cards", "sway", 1200 * maxCardLength);
-    await wait(1300 * maxCardLength);
+    await handleCardEffects();
 
-    setAnimation("cards", "discard", 2000);
+
+    const maxCardLength = Math.max(playerHand.length, daimonHand.length);
+    setAnimation("cards", "sway", 700 * maxCardLength);
+    await wait(800 * maxCardLength);
+
+    setAnimation("cards", "discard", 2600);
     await wait(600);
     
     let winner = handWinner();
@@ -131,7 +135,44 @@ export default function usePlayerActions() {
     await wait(1000);
     gameDispatch({ type: "RESOLVE_HAND" })
     
-  }
+  };
+
+  async function handleCardEffects() {
+    let currentDaimonHealth = daimonHealth;
+    let currentPlayerHealth = playerHealth;
+
+    console.log(playerHand)
+
+    for (const card of playerHand) {
+      setAnimation("cards", "sway", 2000);
+
+      if (card.effect === "Standard") continue;
+      if (card.effect === "Bloodstained") {
+        setAnimation("daimon", "injured", 1600);
+        await wait(1000);
+        currentDaimonHealth += card.value;
+      }
+      if (card.effect === "Charred") {
+        setAnimation("player", "healed", 1600);
+        await wait(1000);
+        currentPlayerHealth += card.value;
+      }
+
+
+      gameDispatch({
+        type: "SET_HEALTHVALUES",
+        payload: {
+          daimonHealth:  currentDaimonHealth,
+          playerHealth: currentPlayerHealth,
+          wager: wager
+        }
+      });
+
+      console.log(playerHealth)
+      console.log(currentDaimonHealth)
+    }
+  };
+
 
   function handWinner () {
     const playerTotal = cardTotal(playerHand);
@@ -144,6 +185,7 @@ export default function usePlayerActions() {
     if (daimonTotal.isBust) return "player";
     if (playerTotal.sum > daimonTotal.sum) return "player";
     if (playerTotal.sum < daimonTotal.sum) return "daimon";
+    return "push";
   }
 
   function availablePlayerActions() {
@@ -154,7 +196,7 @@ export default function usePlayerActions() {
 
     if (playerHand.length === 2) { 
       actions.push("2x");
-      actions.push("Surrender");
+      actions.push("Surr");
     };
 
     return actions;
@@ -181,23 +223,17 @@ export default function usePlayerActions() {
   };
 
   async function endRound() {
-    gameDispatch({ type: "SET_PHASE", 
+    gameDispatch({ type: "SET_HEALTHVALUES", 
       payload: {
-        phase: "intermission"
+        playerHealth: playerHealth,
+        daimonHealth: 0,
+        wager: wager,
       }
     });
-    gameDispatch({ type: "SET_VISIBILITY", 
-      payload: {
-        daimon: true,
-        table: false,
-        healthBars: false,
-        dialogueBox: false,
-      }
-    });
-
-    await wait(600);
-    setAnimation("daimon", "close-eyelid", 2500);
-    await wait(2000)
+    
+    setAnimation("daimon", "close-eyelid", 2800);
+    await wait(2000);
+    
     gameDispatch({ type: "SET_VISIBILITY", 
       payload: {
         daimon: false,
@@ -206,9 +242,18 @@ export default function usePlayerActions() {
         dialogueBox: false,
       }
     });
-    await wait(5000)
+    
+    await wait(200);
+    gameDispatch({ type: "SET_PHASE", 
+      payload: {
+        phase: "intermission"
+      }
+    });
 
-    gameDispatch({ type: "START_GAME" })
+    //await wait(3000);
+
+    
+    //gameDispatch({ type: "START_GAME" });
   };
 
   return { 

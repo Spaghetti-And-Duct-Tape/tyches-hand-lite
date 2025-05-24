@@ -1,3 +1,4 @@
+import type { GameStateType } from "../composables/useGameState";
 import { daimonDailogue1 } from "./daimon1";
 import { daimonDialogue2 } from "./daimon2";
 
@@ -23,4 +24,12 @@ export const daimons: Daimons = {
     id: 2,
     dialogue: daimonDialogue2,
   }
+};
+
+export function conditionalDialogue(gameState: GameStateType): string[] | undefined {
+  const { playerHealth, handCount } = gameState;
+  if (playerHealth < 1000) return ["A child, slept restlessly wondering if today they'd see their parent."];
+  if (playerHealth < 1500) return ["A worried spouse, abandoned for days. Little did they know...they'd be homeless soon."];
+  if (handCount === 6) return ["Tyche grows weary of this match...she demands a greater offering."]
+  return undefined;
 };

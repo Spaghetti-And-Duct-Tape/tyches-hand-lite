@@ -145,6 +145,28 @@ animation:
     shrink-fade 0.7s ease-in-out 0.3s;
 }
 
+.card-front.Bloodstained-card .card-suit,
+.card-front.Bloodstained-card .card-rank,
+.card-front.Bloodstained-card .card-value,
+.card-front.Charred-card .card-suit,
+.card-front.Charred-card .card-rank,
+.card-front.Charred-card .card-value {
+  color: white;
+}
+
+/* Card Type Styles */
+.card-front.Bloodstained-card {
+  background: radial-gradient(circle, #9C1C1C, #5A0B0B);
+  border: 3px solid #5A0B0B;
+  box-shadow: 0 4px 10px rgba(156, 28, 28, 0.6);
+}
+
+.card-front.Charred-card {
+  background: linear-gradient(135deg, #4B4B4B, #FF5700);
+  border: 3px solid #7B2E2F;
+  box-shadow: 0 4px 10px rgba(255, 87, 0, 0.6);
+}
+
 @media (max-width: 1140px) {
   .daimon-card-stack .overlap-cards, .player-card-stack .overlap-cards {
     margin-left: -5.25rem;

@@ -6,7 +6,7 @@ import { useAnimationState } from "../../composables/useAnimationState";
 export default function Daimon() {
   const { gameState } = useGameState();
   const { animationState, setAnimation } = useAnimationState();
-  const { visibility } = gameState;
+  const { visibility, handCount } = gameState;
   const blinkTimer = useRef<number>();
 
   useEffect(() => {
@@ -26,10 +26,16 @@ export default function Daimon() {
 
     return () => window.clearTimeout(blinkTimer.current);
   }, [visibility.daimon, animationState.daimon]);
+
+  useEffect(() => {
+    if (handCount > 5) {
+      setAnimation("daimon", "blinking", 1000)
+    }
+  }, [handCount])
   
   return (
     <div
-      className="daimon-eye-container transition-opacity"
+      className={ `daimon-eye-container transition-opacity ${ handCount > 5 ? "tyches-wrath" : "" }` }
       style={{ 
         marginTop: "min(2vw, 2vh)",
         height: "fit-content",

@@ -4,7 +4,7 @@ import "./card.css";
 
 interface FaceUpCardProps {
   card: {
-  rank: string;
+  displayRank: string | number;
   displaySuit: string;
   };
 }
@@ -24,15 +24,22 @@ export default function Card({
     Clubs: "♣",
     Spades: "♠",
   };
+  const cardRank = {
+    Ace: "A",
+    King: "K",
+    Queen: "Q",
+    Jack: "J"
+  }
   
   const displaySuit = cardSuit[suit as keyof typeof cardSuit] || "";
+  const displayRank = cardRank[rank as keyof typeof cardRank] || rank;
 
     return(
     <div className={`card-container ${ isBlackSuit ? "black" : "" }`}>
       <div className={`card-inner ${ isFlipped ? "flipped" : "" }`}>
         {/* Front (Face-Up) */}
         <div className={`card-face card-front ${ effect }-card`}>
-          <FaceUpCard card={{ rank, displaySuit }} />
+          <FaceUpCard card={{ displayRank, displaySuit }} />
         </div>
 
         {/* Back (Face-Down) */}
@@ -47,7 +54,7 @@ export default function Card({
 function FaceUpCard({ 
   card 
 }: FaceUpCardProps) {
-  const { rank, displaySuit } = card;
+  const { displayRank, displaySuit } = card;
 
   return (
     <div 
@@ -67,7 +74,7 @@ function FaceUpCard({
           justifyContent: "space-between",
         }}
       >
-        <div className="card-suit">{ rank }</div>
+        <div className="card-suit">{ displayRank }</div>
         <div className="card-rank">{ displaySuit }</div>
       </div>
       <div 
@@ -78,7 +85,7 @@ function FaceUpCard({
           justifyContent: "center"
         }}
       >
-        <div className="card-value">{ rank }</div>
+        <div className="card-value">{ displayRank }</div>
       </div>
     </div>
   );

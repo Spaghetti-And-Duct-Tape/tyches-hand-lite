@@ -1,0 +1,85 @@
+.token {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.token .outer-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffcc00, #d4a017, #b8860b);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+}
+
+.token .colored-layer {
+  position: absolute;
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  background-color: #8B0000;
+  top: 7.5%;
+  left: 7.5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.token .text-ring {
+  position: absolute;
+  width: 150%;
+  height: 150%;
+}
+
+.token .gold-text {
+  fill: gold;
+  font-size: 9px;
+  font-family: "Times New Roman", serif;
+  letter-spacing: 1px;
+}
+
+.token .gold-separator {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  border: 3px solid #d4a017;
+  top: 23%;
+  left: 23%;
+  }
+
+.token .inner-core{
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  border-radius: 50%;
+  top: 40%;
+  left: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.token .rune {
+  font-size: 50px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.9), 
+    0 0 20px rgba(255, 255, 255, 0.7), 
+    0 0 30px rgba(255, 255, 255, 0.5),
+    0 0 40px rgba(255, 255, 255, 0.3);
+    
+  animation: pulse-glow 10s infinite;
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }

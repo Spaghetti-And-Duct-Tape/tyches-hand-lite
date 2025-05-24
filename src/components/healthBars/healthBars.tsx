@@ -38,6 +38,7 @@ export default function HealthBars() {
           <HealthBarFill
             health={ daimonHealth }
             maxHealth={ daimonMaxHealth }
+            isPlayer
           />
         </div>
       </WoodenPanel>

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import useDialogue from "../../composables/useDialogue";
 import { useGameState } from "../../composables/useGameState";
-import { daimons } from "../../daimons";
+import { conditionalDialogue, daimons } from "../../daimons";
 import { revealSchema } from "../../utils/revealSchema";
 import DialogueBox from "./dialogueBox";
 import BloodButton from "../bloodButton/bloodButton";
@@ -13,7 +13,7 @@ export default function DialogueManager() {
 
   if (!isDialoguePhase) return;
 
-  const daimonDialogue = daimons[round]?.dialogue?.[phase]?.[handCount];
+  const daimonDialogue = daimons[round]?.dialogue?.[phase]?.[handCount] || conditionalDialogue(gameState);
   const dialogue = useDialogue(daimonDialogue, () => advancePhase());
   const { index, currentLine, advance, reset } = dialogue;
   const opacityDelay: number = 300;
@@ -50,6 +50,7 @@ export default function DialogueManager() {
   }, []);
 
   useEffect(() => {
+    if (!daimonDialogue) return;
     const timer = setTimeout(() => {
       gameDispatch({ type: "SET_VISIBILITY", payload: {
         ...gameState.visibility,

@@ -134,6 +134,16 @@
   animation: blinkingLid 1s;
 }
 
+.tyches-wrath #eye {
+  background: radial-gradient(
+    ellipse at 20% 20%,
+    #ffe3cc 0%,
+    #f5a07c 35%,
+    #cc6666 70%,
+    #330000 100%
+  ) !important;
+}
+
 @keyframes openLid {
   0% {
     transform: rotate(-45deg) translate(0, 0);
