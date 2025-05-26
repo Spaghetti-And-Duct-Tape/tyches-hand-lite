@@ -31,6 +31,10 @@
   align-items: center;
 }
 
+.token.utility .colored-layer {
+  background-color: #1B3A4B;
+} 
+
 .token .text-ring {
   position: absolute;
   width: 150%;

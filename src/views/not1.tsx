@@ -10,6 +10,8 @@ export default function GameView() {
   const { animationState } = useAnimationState();
   const { playerHealth } = gameState;
   const { started } = gameState;
+
+  console.log(gameState)
   
   useEffect(() => {
     if (playerHealth <= 0) endGame();

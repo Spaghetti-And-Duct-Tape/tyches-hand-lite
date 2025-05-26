@@ -1,7 +1,9 @@
 .intermission-layout {
   width: 100%;
   opacity: 0;
-  animation: fade-in-soft-descent 1s ease-in-out forwards;
+  animation: 
+    fade-in 1s ease-in-out forwards,
+    soft-descent 1s ease-in-out forwards;
 }
 
 .intermission-layout .wooden-panel-container {
@@ -10,4 +12,8 @@
 
 .intermission-description-container .wooden-panel-container {
   width: 100%;
+}
+
+.intermission-card-clicker {
+  z-index: 100;
 }

@@ -85,6 +85,7 @@ export default function Intermission() {
           token={ token }
           items={ items }
           setItem={ setItem } 
+          setPhase={ setPhase }
         />
       }
       { phase === "Cards" &&

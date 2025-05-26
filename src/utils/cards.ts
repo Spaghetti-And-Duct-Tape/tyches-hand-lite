@@ -14,6 +14,12 @@ export interface CardType {
   flipped?: boolean
 };
 
+interface weightOptions {
+  rankWeights?: (rank: number) => number;
+  effectWeights?: (effect: string) => number;
+  suitWeights?: (suit: string) => number;
+};
+
 const ranks: rankType[] = ["Ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King"];
 const suits: suitType[] = ["Hearts", "Diamonds", "Clubs", "Spades"];
 const effects: effectType[] = ["Charred", "Bloodstained", "Standard"];
@@ -120,30 +126,30 @@ export function shuffleCards(cards: CardType[], round: number) {
   if (round === 0) return tutorialDeck;
 
   const biastBoost = round < 4 ? (6 / round) : (round / round);
-  const rankWeights = (rank: number) => rank >= 10 ? biastBoost : 1
-  const effectWeights = () => 1;
-  const suitWeights = () => 1;
+  const rankWeights = (rank: number) => rank >= 10 ? biastBoost : 1;
   
-  const weights = calculateCardWeights(cards, rankWeights, effectWeights, suitWeights);
+  const weights = calculateCardWeights(cards, {
+    rankWeights: rankWeights
+  });
   return randomCardPicker(cards, weights, 52);
 };
 
 export function calculateCardWeights(
   cards: CardType[], 
-  rankWeights: (rank: number) => number,
-  effectWeights: (effect: string) => number,
-  suitWeights: (suit: string) => number
+  options: weightOptions = {}
 ) {
-  const weightMap = cards.map(card => {
-    const calculatedRank = convertRank(card.rank)
-    const rankWeight = rankWeights(calculatedRank);
-    const effectWeight = effectWeights(card.effect);
-    const suitWeight = suitWeights(card.suit) || 1;
+  const {
+    rankWeights = () => 1,
+    effectWeights = () => 1,
+    suitWeights = () => 1,
+  } = options;
 
-    return rankWeight * effectWeight * suitWeight;
+  return cards.map(card => {
+    const r = convertRank(card.rank);
+    return rankWeights(r)
+      * effectWeights(card.effect)
+      *suitWeights(card.suit);
   });
-
-  return weightMap
 };
 
 export function randomCardPicker(cards: CardType[], weights: number[], count: number = 10) {

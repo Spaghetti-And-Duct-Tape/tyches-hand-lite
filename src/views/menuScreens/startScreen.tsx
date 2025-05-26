@@ -1,4 +1,4 @@
-import logo from "../assets/tyche's_hand_logo.png"
+import logo from "../../assets/tyche's_hand_logo.png";
 
 export default function StartScreen() {
   return (
@@ -10,7 +10,6 @@ export default function StartScreen() {
           opacity: 0,
           display: "flex",
           justifyContent: "center",
-          animation: "fade-in-soft-descent 1s ease-in-out forwards"
         }}
       >
         <img

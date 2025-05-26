@@ -1,7 +1,8 @@
 import type { dialogueType } from ".";
 
 export const daimonDialogue2: dialogueType = {
-  introDialogue: {
+  
+  "intro-dialogue": {
     0: [
       "Now let's being..."
     ],

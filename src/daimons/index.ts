@@ -1,35 +1,120 @@
 import type { GameStateType } from "../composables/useGameState";
+import { cardTotal } from "../utils/utils";
 import { daimonDailogue1 } from "./daimon1";
-import { daimonDialogue2 } from "./daimon2";
 
-export type dialogueType = {
-  introDialogue?: { [handIndex: number]: string[] };
-  handDialogue?: { [handIndex: number]: string[] };
-  endDialogue?: { [handIndex: number]: string[] };
+type dialougeType = {
+  [key: string | number]: string[]
 }
 
-interface Daimons {
-  [key: number]: {
-    id: number;
-    dialogue: dialogueType;
-  }
+export type daimonDialogueType = {
+  "intro-dialogue"?: dialougeType;
+  "hand-dialogue"?: dialougeType;
+  "end-dialogue"?: dialougeType;
+};
+
+interface Daimon {
+  id: number;
+  name: string;
+  rune: string;
+  effect: (gs: GameStateType) => { [key: keyof GameStateType]: GameStateType };
+  dialogue: daimonDialogueType;
 }
 
-export const daimons: Daimons = {
-  1: {
-    id: 1,
-    dialogue: daimonDailogue1,
+export const daimons: Daimon[] = [{
+  id: 1,
+  name: "The Draw",
+  rune: "",
+  effect: () => null,
+  dialogue: daimonDailogue1
+}, {
+  id: 2,
+  name: "The Thrill",
+  rune: "α",
+  effect: (gs: GameStateType): GameStateType => {
+    if (gs.phase === "daimon-turn") {
+      const daimonTotal = cardTotal(gs.daimonHand);
+      const playerTotal = cardTotal(gs.playerHand);
+      
+      if (!daimonTotal.isBust && !playerTotal.isBust) {
+        if (playerTotal.sum > daimonTotal.sum) {
+          return {
+            daimonHand: [...gs.daimonHand, gs.deck[0]],
+            deck: gs.deck.slice(1),
+          }
+        }
+      }
+    }
   },
-  2: {
-    id: 2,
-    dialogue: daimonDialogue2,
-  }
-};
+  dialogue: {}
+}, {
+  id: 3,
+  name: "The Wall",
+  rune: "λ",
+  effect: (gs:GameStateType): GameStateType => {
+    if (gs.phase === "wager" && gs.hand === 0) {
+      return { 
+        daimonHealth: gs.daimonHealth * 2,
+        daimonMaxHealth: gs.daimonHealth * 2 
+      }
+    };
+  },
+  dialogue: {}
+}, {
+  id: 4,
+  name: "The Resolve",
+  rune: "Ψ",
+  effect: (gs: GameStateType): GameStateType => {
+    if (gs.phase === "daimon-turn") {
+      return {
+        daimonHealth: gs.daimonHealth + 50,
+        daimonMaxHealth: gs.daimonMaxHealth + 100,
+        animations: {
+          ...gs.animations,
+          daimon: "healed"
+        }
+      }
+    }
+  },
+  dialogue: {}
+}, {
+  id: 5,
+  name: "The Descent",
+  rune: "Θ",
+  effect: (gs: GameStateType): GameStateType => {
+    if (gs.phase === "daimon-turn") {
+      return { playerHealth: gs.playerHealth - 100 }
+    }
+  },
+  dialogue: {}
+},  {
+  id: 6,
+  name: "The Choice",
+  rune: "δ",
+  effect: (gs: GameStateType): GameStateType => {
+    if (gs.phase === "daimon-turn") {
+      const randNum = Math.floor(Math.random() * 6);
+      let randAbility = daimons[randNum];
 
-export function conditionalDialogue(gameState: GameStateType): string[] | undefined {
-  const { playerHealth, handCount } = gameState;
-  if (playerHealth < 1000) return ["A child, slept restlessly wondering if today they'd see their parent."];
-  if (playerHealth < 1500) return ["A worried spouse, abandoned for days. Little did they know...they'd be homeless soon."];
-  if (handCount === 6) return ["Tyche grows weary of this match...she demands a greater offering."]
-  return undefined;
-};
+      switch (randNum) {
+        case 0:
+        case 2:
+        case 3:
+          randAbility = daimons[3];
+          break;
+        case 1:
+          randAbility = daimons[1];
+          break;
+        case 4:
+        case 5:
+          randAbility = daimons[4]
+      }
+
+      const effect = randAbility.effect(gs);
+
+      console.log(effect)
+
+      return effect
+    }
+  },
+  dialogue: {}
+}]

@@ -1,52 +1,33 @@
-import { useEffect, useState } from "react";
-import { useGameState } from "../../composables/useGameState"
-import { cardTotal, wait } from "../../utils/utils";
+import { useEffect } from "react";
+import { useGameState } from "../../composables/useGameState";
 import PerspectiveCards from "./perspectiveCards";
-import NumberTicker from "../healthBars/numberTicker";
-import { emptyCard, type CardType } from "../../utils/cards";
-import usePlayerActions from "../../composables/usePlayerActions";
+import { emptyCard } from "../../utils/cards";
+import CardCounter from "./cardCounter";
 
 export default function HandleCards() {
-  const { gameState, gameDispatch } = useGameState();
+  const { gameState, gameDispatch, drawPlayerCards, drawDaimonCards } = useGameState();
   const { phase, playerHand, daimonHand } = gameState;
-  const handleDaimonHand = daimonHand.length === 1 ? [...daimonHand, emptyCard] : daimonHand;
-  const animationDelay = 300;
+    const handleDaimonHand = daimonHand.length === 1 ? [...daimonHand, emptyCard] : daimonHand;
 
   useEffect(() => {
-    if (phase !== "draw") return;
-    startHand();
+    if (phase === "draw") startHand();
   }, [phase]);
 
   async function startHand() {
-    await wait(2000);
     await drawPlayerCards(2);
-    await drawDaimonCards();
-    gameDispatch({ type: "SET_PHASE", payload: { phase: "handDialogue" } })
+    await drawDaimonCards(1);
+    gameDispatch({ type: "SET_PHASE", 
+      payload: {
+        phase: "hand-dialogue"
+    }});
   };
-
-  async function drawPlayerCards(cardCount: number) {
-    let cardIndex = 0
-   
-    while (cardIndex < cardCount) {
-      gameDispatch({ type: "DRAW_PLAYER_CARD" })
-      cardIndex++
-      
-      await wait(animationDelay * cardIndex)
-    };
-  };
-
-  async function drawDaimonCards() {
-    gameDispatch({ type: "DRAW_DAIMON_CARD" });
-    await wait(animationDelay);
-    gameDispatch({ type: "DRAW_EMPTY_CARD" });
-  }
 
   return (
     <>
       <div
-        style={{ 
+        style={{
           display: "flex",
-          height: "35%",
+          height: "35%"
         }}
       >
         <PerspectiveCards
@@ -54,14 +35,14 @@ export default function HandleCards() {
           owner="daimon"
         />
         <CardCounter
-          hand={ daimonHand }
+          hand={ handleDaimonHand }
           owner="daimon"
         />
       </div>
       <div
-        style={{ 
+        style={{
           display: "flex",
-          height: "35%",
+          height: "35%"
         }}
       >
         <PerspectiveCards
@@ -74,46 +55,5 @@ export default function HandleCards() {
         />
       </div>
     </>
-  )
-};
-
-
-function CardCounter({ 
-  hand,
-  owner 
-} : { 
-  hand: CardType[];
-  owner: string;
-}) {
-  const { gameState } = useGameState();
-  const [value, setValue] = useState(0);
-  const isResolving = gameState.phase === "resolution";
-  const isWinner = gameState.handWinner === owner || gameState.handWinner === "push";
-  const isLoser = gameState.handWinner !== null && !isWinner;
-  const total = isResolving ? cardTotal(hand).sum : 0;
-  const { resolveHand } = usePlayerActions();
-
-  useEffect(() => {
-    if (isResolving) resolveHand();
-  }, [isResolving]);
-
-  return (
-    <div
-      className={ `transition-opacity ${ isWinner && "winner-counter" } ${ isLoser && "loser-counter" }` }
-      style={{ 
-        opacity: isResolving ? "1": "0",
-        display: "flex",
-        alignItems: "center",
-        fontSize: "min(2.5vw, calc(2.5vh * 16 / 9))",
-        width: "2vw"
-      }}
-    >
-      <NumberTicker
-        duration={ 500 * hand.length }
-        replacement={ total }
-        value={ value }
-        setValue={ setValue }
-      />
-    </div>
   )
 };
