@@ -6,6 +6,7 @@ import "./table.css";
 export default function Table() {
   const { gameState } = useGameState();
   const { visibility } = gameState;
+  const { table } = visibility;
 
   return (
     <div 
@@ -14,7 +15,7 @@ export default function Table() {
         display: "flex",
         justifyContent: "center",
         width: "100%", 
-        opacity: visibility.table ? "1" : "0" 
+        opacity: table ? "1" : "0" 
       }}
     >
       <div 

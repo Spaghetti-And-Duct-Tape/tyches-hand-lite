@@ -8,7 +8,8 @@ export default function CardIntermission({
   cards,
   items, 
   discardCards,
-  setItem
+  setItem,
+  setPhase
 } : {
   cards: CardType[] | undefined;
   items: {
@@ -53,14 +54,19 @@ export default function CardIntermission({
 
   return (
     <>
-      <h2
+      <div
         style={{ 
           textAlign: "center",
           gridColumn: "1 / span 4" 
         }}
       >
-        Replacement Cards
-      </h2>
+        <p>
+          { toggleCards 
+            ? "Three cards have appeared before you, you may choose to add them to your deck."
+            : "Tyche demands balance. Choose " + cardsToAdd.length + " cards to remove."
+          }
+        </p>
+      </div>
       <div
         className="intermission-description-container"
         style={{
@@ -120,6 +126,7 @@ function CardSection({
       <div
         style={{
           width: "100%",
+          height: "10% !important",
           display: "flex",
           justifyContent: "space-evenly",
           gridColumn: "1 / span 3" 
@@ -133,6 +140,7 @@ function CardSection({
               margin: "5px",
               animation: pickedCards.includes(card) ? "pulse-glow 2s infinite" : "" 
             }}
+            className="intermission-card-clicker"
             onClick={ () => selectCard(card) }
           >
             <Card

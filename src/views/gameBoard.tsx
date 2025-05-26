@@ -1,13 +1,12 @@
-import ActionButton from "../components/actionButtons/actionButtons";
+import ActionButton from "../components/actionButtons/actionButton";
 import Daimon from "../components/daimon/daimon";
 import DialogueManager from "../components/dialogueBox/dialogueManager";
 import HealthBars from "../components/healthBars/healthBars";
 import Table from "../components/table/table";
-import "./gameBoard.css";
 
 export default function GameBoard() {
-  return(
-    <div 
+  return (
+    <div
       className="game-board"
       style={{
         width: "100%",
@@ -18,11 +17,12 @@ export default function GameBoard() {
         alignItems: "center",
       }}
     >
-      <ActionButton />
-      <HealthBars />
-      <DialogueManager />
       <Daimon />
       <Table />
+      <HealthBars />
+      { /* Phase triggered components */ }
+      <DialogueManager />
+      <ActionButton />
     </div>
   )
 };

@@ -1,0 +1,23 @@
+.logo-container {
+  animation: 
+    fade-in 1s ease-in-out forwards,
+    soft-descent 1s ease-in-out forwards;
+}
+
+.game-over-line-container {
+  opacity: 0;
+  height: min(10vw, calc(7vh * 16 / 9));
+  animation: fade-in 8s ease-in-out forwards;
+}
+
+.game-over-line-container span {
+  font-size: 100%;
+  display: inline-block;
+  margin: 0 0.1rem;
+}
+
+.loading-text {
+  animation: float 5s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+

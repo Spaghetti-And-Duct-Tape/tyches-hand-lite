@@ -9,6 +9,7 @@ export default function TokenIntermission({
   token,
   items, 
   setItem,
+  setPhase
 } : {
   token: TokenType | undefined;
   items: {
@@ -16,20 +17,21 @@ export default function TokenIntermission({
     token: number | null;
   };
   setItem: (key: string, value: CardType[] | number) => void;
+  setPhase: (phase: string) => void;
 }) {
   
   if (!token) return;
 
   return (
     <>
-      <h2
+      <div
         style={{ 
           textAlign: "center",
           gridColumn: "1 / span 4" 
         }}
       >
-        Tyche's Blessing
-      </h2>
+        <p>Tyche acknowledges you and grants you her blessing...if you choose to accept it.</p>
+      </div>
       <div
         className="inner-content"
       >
@@ -68,10 +70,12 @@ export default function TokenIntermission({
         <BloodButton
           action={ () => setItem("token", token.id) }
         >
-          Equip
+          Accept
         </BloodButton>
-        <BloodButton>
-          Discard
+        <BloodButton
+          action={ () => setPhase("Cards") }
+        >
+          Deny
         </BloodButton>
       </div>
     </>
@@ -95,7 +99,7 @@ function CurrentToken({ currentToken } : { currentToken?: TokenType }) {
               margin: "0",
             }}
           >
-            Current Token:
+            Current Blessing:
           </p> 
           <p
             style={{ 

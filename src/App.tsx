@@ -1,15 +1,12 @@
 import './App.css';
-import { AnimationProvider } from './composables/useAnimationState';
 import { GameProvider } from './composables/useGameState';
-import GameView from './views/gameView';
+import Game from './views/game';
 
 
 function App() {
   return (
     <GameProvider>
-      <AnimationProvider>
-        <GameView />
-      </AnimationProvider>
+      <Game />
     </GameProvider>
   )
 }

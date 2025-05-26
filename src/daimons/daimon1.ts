@@ -1,44 +1,48 @@
-import type { dialogueType } from ".";
+import type { daimonDialogueType } from ".";
 
-export const daimonDailogue1: dialogueType = {
-  introDialogue: { 
+export const daimonDailogue1: daimonDialogueType = {
+  "intro-dialogue": { 
     0: [
       "Ah...you're finally awake.", 
       "Quite brave of you to come here.", 
       "Come sit...join me at the table.", 
-      "Have you forgotten how to play?", 
-      "No matter, all you need is something to wager with.", 
-      "But coins aren't used here, our bids are more...costly."
+      "It seems you have forgotten how to play", 
+      "No matter, all you need is something to wager with.",
+      "Mind you, money doesn't carry weight here, the stakes are a little higher."
     ]
   },
-  handDialogue: {
+  "hand-dialogue": {
     1: [
-      "Why do you overreact...that drop was merely pocket change.",
-      "Now playing this game is quite simple, get as close TWENTY-ONE - but try not to pass it.",
-      "Your total of twelve against my seven...the Goddess of Fortune is calling you to HIT."
+      "Oh spare me...that drop was merely pocket change.",
+      "This game will be delightfully simple for a mind as keen as yours.",
+      "Edge as close to twenty-one as luck permits, surpass it and the hand is yours no more.",
+      "Your total of twelve against my seven...the goddess of Fortune beckons you to HIT."
     ],
     2: [
-      "An eighteen is right at the cusp.",
-      "Stand and your eighteen may still beat my hand."
+      "Your eighteen teeters on the brink; one more card could betray you.",
+      "Stand your ground, and your eighteen may yet conquer my hand."
     ],
     3: [
-      "Sometimes it's better to accept defeat.",
-      "Your sixteen may be too much, while my ace is favorable.",
-      "Surrender now and regain some of your strength."
+      "Sixteen flirts with excess...while my Ace could shatter your bet.",
+      "Surrender and you may regain at least some of your strength."
     ],
     4: [
-      "Quite fortunate of you.",
-      "Double down, raise your bet, and draw one card...",
-      "Your bravery may reward you."
+      "Eleven against my seven...fortune truly smiles upon you.",
+      "Double your wager, and draw but one card...",
+      "Your bravery may greatly reward you."
     ],
     5: [
-      "The Goddess of Fortune truly smiles upon you.",
-      "Unless I have a black jack myself you are sure to win.",
-      "Stand and take the spoils."
+      "Quite the fortunate twist...a blackjack.", 
+      "I have no choice but to concede, stand and claim your victory."
     ],
     
   },
-  endDialogue: {
-    5: []
+  "end-dialogue": {
+    5: [
+      "The halls ring with success...",
+      "The golden lights bathe the rooms...",
+      "The table seems to call your name...",
+      "It draws you in."
+    ]
   }
 };

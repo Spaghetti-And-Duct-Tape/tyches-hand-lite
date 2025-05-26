@@ -1,0 +1,58 @@
+.player-injured::before, .player-healed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+    
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(255, 215, 100, 0.3) 85%,
+    rgba(255, 200, 50, 0.5) 100%
+  );
+  animation: pulse-glow 1.6s ease-in-out infinite;
+  opacity: 0.5;
+}
+
+.player-injured::before {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(180, 30, 30, 0.5) 85%,
+    rgba(180, 30, 30, 0.9) 100%
+  );
+}
+
+.player-injured {
+  animation: quiver 0.5s ease infinite;
+}
+
+.player-effect{
+  opacity: 0;
+  transition: opacity 3s ease-in-out ;
+}
+
+.player-effect {
+  opacity: 0;
+  transition: opacity ease-in-out 3s;
+}
+
+.player-effect .p {
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.9), 
+    0 0 20px rgba(255, 255, 255, 0.7), 
+    0 0 30px rgba(255, 255, 255, 0.5),
+    0 0 40px rgba(255, 255, 255, 0.3);
+}
+
+.player-attacked .player-effect {
+  opacity: 0;
+  
+  animation: 
+    fade-in 0.6s ease-in-out forwards,
+    text-glow 1s ease-in-out 0.5s,
+    fade-in 0.6s ease-in-out 1.1s reverse forwards;
+}

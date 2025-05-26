@@ -8,10 +8,11 @@
   --gold-base: #9B4D00;
 }
 
-.blood-button {
+.blood-button{
   color: var(--blood-text);
   text-transform: uppercase;
-  font-size: min(1.3vw, calc(1.3vh * 16 / 9));;
+  font-size: clamp(12px, 1.3vw, calc(1.3vh * 16 / 9));
+
 
   border: 0.125rem solid transparent;
   border-radius: 0.5rem;

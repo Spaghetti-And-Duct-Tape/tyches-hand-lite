@@ -1,4 +1,4 @@
-import { useAnimationState } from "../../composables/useAnimationState";
+import { useGameState } from "../../composables/useGameState";
 import type { CardType } from "../../utils/cards";
 import Card from "./card";
 
@@ -9,11 +9,12 @@ export default function PerspectiveCards({
   hand: CardType[];
   owner: string;
 }) {
-  const { animationState } = useAnimationState();
+  const { gameState } = useGameState();
+  const { animations } = gameState;
   
   return(
     <div
-      className={ `${ owner }-card-stack ${ animationState.cards }` }
+      className={ `${ owner }-card-stack ${ animations.cards }` }
       style={{
         display: "flex",
         justifyContent: "center"

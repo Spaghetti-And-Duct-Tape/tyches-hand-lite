@@ -4,9 +4,12 @@ import "./token.css";
 export default function Token({
   token
 } : { 
-  token: TokenType
+  token?: TokenType
 }) {
+  if (!token) return;
+
   const { rune, effect } = token;
+
   return (
     <div className={ `token ${ effect }` }>
       <div className="outer-ring" />
