@@ -8,20 +8,31 @@ export default function Landscape() {
   
   return(
     <div
-      className="landscape"
       style={{
-        width: "min(100vw, calc(100vh * 16 / 9))",
-        height: "min(calc(100vw * 9 / 16), 100vh)",
-        position: "relative",
-        background: "#111",
-        zIndex: "-1",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100dvw",
+        height: "100dvh"
       }}
     >
-      { phase === "intermission" ? (
-        <Intermission />
-      ) : (
-        <GameBoard />
-      )}
+      <div
+        className="landscape"
+        style={{
+          aspectRatio: "16 / 9",
+          width: "100%",
+          maxHeight: "100dvh",
+          maxWidth: "calc(100dvh * (16/9))",
+          position: "relative",
+          overflow: "hidden"
+        }}
+      >
+        { phase === "intermission" ? (
+          <Intermission />
+        ) : (
+          <GameBoard />
+        )}
+      </div>
     </div>
   )
 };

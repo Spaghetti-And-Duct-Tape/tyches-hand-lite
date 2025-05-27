@@ -66,6 +66,9 @@ export default function usePlayerActions() {
   };
 
   async function player2x() {
+    gameDispatch({ type: "SET_PHASE",
+      payload: "player2x"
+    })
     const wage = wager / 2;
     const handleHealths = await dealDamage(
       playerHealth - wage,
@@ -85,7 +88,10 @@ export default function usePlayerActions() {
     let drawCount = 1;
     const startingHand = daimonHand[0];
 
-    while (projectedSum(startingHand, drawCount) < 17) {
+    while (
+      projectedSum(startingHand, drawCount) < 17 &&
+      drawCount < 12
+    ) {
       drawCount++;
       await wait(300);
     };

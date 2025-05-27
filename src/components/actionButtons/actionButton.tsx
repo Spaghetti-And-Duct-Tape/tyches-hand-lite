@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useGameState, type playerActionsType } from "../../composables/useGameState";
 import BloodButton from "../bloodButton/bloodButton";
 import { tutorialPlayerActions } from "../../utils/utils";
@@ -40,7 +40,7 @@ export default function ActionButton() {
     if (gameState.token === 1) actions.push("2x");
     if (playerHand.length > 2) return actions;
     
-    actions.push("Surr");
+    if (gameState.token !== 4) actions.push("Surr");
     if (playerHealth <= wager / 2 || actions.length === 4) return actions;
     actions.push("2x");
 
@@ -62,8 +62,6 @@ export default function ActionButton() {
     const fn = buttonActionsMap[name];
     if (fn) fn();
   };
-
-  
 
   return (
     <div

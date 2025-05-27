@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useGameState } from "../../composables/useGameState";
-import { daimons } from "../../daimons";
+import { handleDialogue } from "../../daimons";
 import BloodButton from "../bloodButton/bloodButton";
 import DialogueBox from "./dialogueBox";
 import useDialogue from "../../composables/useDialogue";
@@ -8,7 +8,7 @@ import { revealSchema } from "../../utils/revealSchema";
 
 export default function DialogueManager() {
   const { gameState, gameDispatch } = useGameState();
-  const { phase, hand, daimon, visibility } = gameState;
+  const { phase, daimon, visibility } = gameState;
   const isDialoguePhase = phase === "intro-dialogue" 
     || phase === "hand-dialogue"
     || phase === "end-dialogue";
@@ -16,9 +16,9 @@ export default function DialogueManager() {
   if (!isDialoguePhase) return;
   //Only triggered in dialogue game phases
   
-  const daimonDialogue = daimons[daimon]?.dialogue?.[phase]?.[hand];
+  const daimonDialogue = handleDialogue(gameState);
   const dialogue = useDialogue(daimonDialogue, () => advancePhase());
-  const { index, currentLine, advance, reset } = dialogue;
+  const { index, currentLine, isDone, advance, reset } = dialogue;
 
   const revealObj: {
     dialogueBox: number;
@@ -48,6 +48,18 @@ export default function DialogueManager() {
       }})
     }
   }, []);
+
+  useEffect(() => {
+    if (!currentLine) {
+      gameDispatch({ type: "SET_VISIBILITY", 
+        payload: {
+          ...visibility,
+          daimon: true,
+          table: true,
+          healthBars: true,
+      }});
+    }
+  }, [index])
 
   useEffect(() => {
     if (!daimonDialogue) return;

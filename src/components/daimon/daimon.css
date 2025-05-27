@@ -89,7 +89,7 @@
 
 
 .rune {
-  font-size: 40px;
+  font-size: 25px;
   transform: rotate(-45deg);
   opacity: 0;
   font-weight: bold;
@@ -132,7 +132,11 @@
   --glow-color: rgba(180, 30, 30, 0.9);
 }
 
-.daimon-injured #eye {
+.daimon-healed {
+  --glow-color: rgba(255, 215, 100, 0.3);
+}
+
+.daimon-injured #eye, .daimon-healed #eye {
   animation: box-transition 1s ease-out forwards;
 
 }

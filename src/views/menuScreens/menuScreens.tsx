@@ -34,9 +34,12 @@ export default function MenuScreens() {
         <StartScreen />
       )}
 
-      <div 
+      <div
         className="start-button-container transition-opacity"
         style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-evenly",
           opacity: playButton ? "1" : "0",
           zIndex: "1"
         }}
@@ -46,6 +49,15 @@ export default function MenuScreens() {
           action={ () => gameDispatch({ type: "START_GAME" }) }
         >
           Play
+        </BloodButton>
+        <BloodButton
+          disabled={ !playButton }
+          action={ () => gameDispatch({ type: "START_GAME", 
+            payload: {
+              round: 1
+          }})}
+        >
+          Skip Tutorial
         </BloodButton>
       </div>
 

@@ -1,15 +1,23 @@
 import type { GameStateType } from "../composables/useGameState";
 import { cardTotal } from "../utils/utils";
 import { daimonDailogue1 } from "./daimon1";
+import { daimonDialogue2 } from "./daimon2";
+import { daimonDailogue3 } from "./daimon3";
+import { daimonDailogue4 } from "./daimon4";
+import { daimonDialogue5 } from "./daimon5";
+import { daimonDialogue6 } from "./daimon6";
+
+let healthDialogueTrigger = true;
 
 type dialougeType = {
   [key: string | number]: string[]
 }
 
 export type daimonDialogueType = {
-  "intro-dialogue"?: dialougeType;
+  "intro-dialogue"?: string[];
   "hand-dialogue"?: dialougeType;
-  "end-dialogue"?: dialougeType;
+  "end-dialogue"?: string[];
+  "player-health"?: dialougeType;
 };
 
 interface Daimon {
@@ -21,13 +29,13 @@ interface Daimon {
 }
 
 export const daimons: Daimon[] = [{
-  id: 1,
+  id: 0,
   name: "The Draw",
   rune: "",
   effect: () => null,
   dialogue: daimonDailogue1
 }, {
-  id: 2,
+  id: 1,
   name: "The Thrill",
   rune: "α",
   effect: (gs: GameStateType): GameStateType => {
@@ -45,9 +53,9 @@ export const daimons: Daimon[] = [{
       }
     }
   },
-  dialogue: {}
+  dialogue: daimonDialogue2
 }, {
-  id: 3,
+  id: 2,
   name: "The Wall",
   rune: "λ",
   effect: (gs:GameStateType): GameStateType => {
@@ -58,16 +66,16 @@ export const daimons: Daimon[] = [{
       }
     };
   },
-  dialogue: {}
+  dialogue: daimonDailogue3
 }, {
-  id: 4,
+  id: 3,
   name: "The Resolve",
   rune: "Ψ",
   effect: (gs: GameStateType): GameStateType => {
     if (gs.phase === "daimon-turn") {
       return {
-        daimonHealth: gs.daimonHealth + 50,
-        daimonMaxHealth: gs.daimonMaxHealth + 100,
+        daimonHealth: gs.daimonHealth + 150,
+        daimonMaxHealth: gs.daimonMaxHealth + 75,
         animations: {
           ...gs.animations,
           daimon: "healed"
@@ -75,19 +83,19 @@ export const daimons: Daimon[] = [{
       }
     }
   },
-  dialogue: {}
+  dialogue: daimonDailogue4
 }, {
-  id: 5,
-  name: "The Descent",
+  id: 4,
+  name: "The Abyss",
   rune: "Θ",
   effect: (gs: GameStateType): GameStateType => {
     if (gs.phase === "daimon-turn") {
       return { playerHealth: gs.playerHealth - 100 }
     }
   },
-  dialogue: {}
+  dialogue: daimonDialogue5
 },  {
-  id: 6,
+  id: 5,
   name: "The Choice",
   rune: "δ",
   effect: (gs: GameStateType): GameStateType => {
@@ -111,10 +119,23 @@ export const daimons: Daimon[] = [{
 
       const effect = randAbility.effect(gs);
 
-      console.log(effect)
-
       return effect
     }
   },
-  dialogue: {}
+  dialogue: daimonDialogue6
 }]
+
+export function handleDialogue(gs: GameStateType) {
+  const { phase, daimon, hand } = gs;
+  const daimonDialogue = daimons[daimon]?.dialogue;
+  let finalDialogue: string[] | undefined;
+
+  if (phase === "intro-dialogue") {
+    healthDialogueTrigger = true;
+    finalDialogue = daimonDialogue["intro-dialogue"];
+  }
+  if (phase === "hand-dialogue") finalDialogue = daimonDialogue["hand-dialogue"]?.[hand];
+  if (phase === "end-dialogue") finalDialogue = daimonDialogue["end-dialogue"];
+  
+  return finalDialogue;
+};

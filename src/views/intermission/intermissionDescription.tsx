@@ -15,7 +15,9 @@ export default function IntermissionDescription({
   
   return (
     <WoodenPanel>
-      <div className="inner-content">
+      <div 
+        className="inner-content"
+      >
         <h2
           style={{
             margin: "5px",
