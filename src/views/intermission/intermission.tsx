@@ -13,12 +13,12 @@ export default function Intermission() {
   const { gameState, gameDispatch } = useGameState();
   const [phase, setPhase] = useState<PhasesType>("Dark");
   const items = {
-    deck: [...gameState.deck, ...gameState.discardPile],
+    deck: gameState.deck,
     token: gameState.token
   };
-  const discardCards = useMemo(() => shuffleCards(gameState.deck, 10).slice(0, 5), [])
-  const token = useMemo(() => randomToken(), [])
-  const cards = useMemo(() => randomCards(), [])
+  const discardCards = useMemo(() => shuffleCards(gameState.deck, 10).slice(0, 5), []);
+  const token = useMemo(() => randomToken(), []);
+  const cards = useMemo(() => randomCards(), []);
 
   useEffect(() => {
     if (phase !== "Dark") return;
@@ -59,7 +59,7 @@ export default function Intermission() {
 
   function randomCards() {
     const discoverableCards = cardInventory.filter(card => !items.deck.includes(card));
-  
+
     if (discoverableCards.length === 0) return;
   
     const isPlayerLow = gameState.playerHealth < 2000

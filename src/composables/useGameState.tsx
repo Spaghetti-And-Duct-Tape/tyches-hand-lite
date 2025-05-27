@@ -102,8 +102,12 @@ const initialGameState: GameStateType = {
 };
 
 type GameActionType = 
-  | { type: "START_GAME" }
+  | { type: "START_GAME", 
+      payload?: { 
+        round?: number
+    }}
   | { type: "END_GAME" }
+  | { type: "END_ROUND" }
   | { type: "SET_ANIMATION", 
       payload: {
         target: "player" | "daimon" | "cards"
@@ -177,27 +181,52 @@ function gameReducer(
   const deckToDraw = deck.length === 0
     ? shuffleCards(discardPile, round)
     : deck;
+  
+  const allCards = [
+    ...deck,
+    ...playerHand,
+    ...daimonHand,
+    ...discardPile
+  ]
 
   switch(action.type) {
     case "START_GAME":
       const calcDaimonHealth = calculateDaimonHealth(round);
-      const shuffledDeck = shuffleCards(deck, round);
+      const shuffledDeck = shuffleCards(allCards, round);
+      const startingRound = action?.payload?.round ? action.payload.round : round;
+      const daimonIndex = startingRound < 6 ? startingRound : (startingRound - 6) % 5 + 1
 
       return {
         ...state,
         phase: "intro-dialogue",
         started: true,
-        round: round + 1,
+        round: startingRound + 1,
         hand: 0,
-        daimon: round % 6,
+        daimon: daimonIndex,
+        playerHealth: calculateHealth(playerHealth + wager, playerMaxHealth),
         playerMaxHealth: 5000,
-        daimonHealth: round === 0 ? 500 : calcDaimonHealth,
+        daimonHealth: calcDaimonHealth,
         daimonMaxHealth: calcDaimonHealth,
         wager: 0,
         playerHand: [],
         daimonHand: [],
         handWinner: null,
         deck: shuffledDeck,
+        discardPile: [],
+      };
+
+    
+    case "END_ROUND":
+      return {
+        ...state,
+        phase: "end-dialogue",
+        hand: 0,
+        playerHealth: playerHealth + wager,
+        playerMaxHealth: 5000,
+        wager: 0,
+        deck: allCards,
+        playerHand: [],
+        daimonHand: [],
         discardPile: [],
       };
 
@@ -517,11 +546,7 @@ function GameProvider({ children } : { children: React.ReactNode }) {
 
     await wait(200);
 
-    gameDispatch({ type: "SET_PHASE", 
-      payload: {
-        phase: "end-dialogue"
-      }
-    });
+    gameDispatch({ type: "END_ROUND" });
 
     return true;
   };

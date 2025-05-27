@@ -9,7 +9,6 @@ export default function CardIntermission({
   items, 
   discardCards,
   setItem,
-  setPhase
 } : {
   cards: CardType[] | undefined;
   items: {
@@ -38,6 +37,7 @@ export default function CardIntermission({
     setShowCard(card);
     setCardsToRemove(prev => {
       if (prev.includes(card)) return prev.filter(prevCard => prevCard.id !== card.id);
+      if (cardsToAdd.length === 0) return prev;
       if (prev.length + 1 > cardsToAdd.length) {
         return [...prev.slice(1), card]
       };

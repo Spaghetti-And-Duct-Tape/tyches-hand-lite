@@ -9,6 +9,7 @@ export default function HealthBars() {
     playerHealth, 
     playerMaxHealth,
     daimon,
+    round,
     daimonHealth, 
     daimonMaxHealth,
     visibility
@@ -30,7 +31,7 @@ export default function HealthBars() {
             name={ daimons[daimon].name }
             health={ daimonHealth }
             maxHealth={ daimonMaxHealth }
-            isPlayer={ true }
+            isPlayer={ false }
           />
         </div>
         <div
@@ -45,7 +46,7 @@ export default function HealthBars() {
         >
           
           <HealthStatus
-            name="The Gambler"
+            name={ `Trial: ${ round }` }
             health={ playerHealth }
             maxHealth={ playerMaxHealth }
             isPlayer={ true }

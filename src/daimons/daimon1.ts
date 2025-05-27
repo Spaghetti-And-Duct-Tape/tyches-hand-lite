@@ -1,20 +1,18 @@
 import type { daimonDialogueType } from ".";
 
 export const daimonDailogue1: daimonDialogueType = {
-  "intro-dialogue": { 
-    0: [
-      "Ah...you're finally awake.", 
-      "Quite brave of you to come here.", 
-      "Come sit...join me at the table.", 
-      "It seems you have forgotten how to play", 
-      "No matter, all you need is something to wager with.",
-      "Mind you, money doesn't carry weight here, the stakes are a little higher."
-    ]
-  },
+  "intro-dialogue": [
+    "Ah...you're finally awake.", 
+    "Quite brave of you to come here.", 
+    "Come sit...join me at the table.", 
+    "Have you forgotten how to play?", 
+    "No matter, all you need is something to wager with.",
+    "Mind you, money doesn't carry weight here, the stakes are a little higher."
+  ],
   "hand-dialogue": {
     1: [
       "Oh spare me...that drop was merely pocket change.",
-      "This game will be delightfully simple for a mind as keen as yours.",
+      "Now let me guide you, though a mind as keen as yours will find this simple.",
       "Edge as close to twenty-one as luck permits, surpass it and the hand is yours no more.",
       "Your total of twelve against my seven...the goddess of Fortune beckons you to HIT."
     ],
@@ -24,7 +22,7 @@ export const daimonDailogue1: daimonDialogueType = {
     ],
     3: [
       "Sixteen flirts with excess...while my Ace could shatter your bet.",
-      "Surrender and you may regain at least some of your strength."
+      "Surrender and you will regain some of your strength."
     ],
     4: [
       "Eleven against my seven...fortune truly smiles upon you.",
@@ -37,12 +35,11 @@ export const daimonDailogue1: daimonDialogueType = {
     ],
     
   },
-  "end-dialogue": {
-    5: [
-      "The halls ring with success...",
-      "The golden lights bathe the rooms...",
-      "The table seems to call your name...",
+  "end-dialogue": [
+      "You push the heavy doors - the casino welcoming your initiation.",
+      "The clatter and chimes of success ring in your ear,",
+      "The warm wash of the golden lights bathe your skin.",
+      "A lone table and its empty chair appear to beckon you...",
       "It draws you in."
-    ]
-  }
+  ]
 };

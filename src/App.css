@@ -1,10 +1,9 @@
 html, body, #root {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
   display: flex;
+  min-height: 100vh;
+  min-width: 100vw;
   align-items: center;
   justify-content: center;
   color: #A88E72;

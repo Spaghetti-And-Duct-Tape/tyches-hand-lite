@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useGameState, type phaseType } from "../composables/useGameState"
+import { useGameState, type GameStateType, type phaseType } from "../composables/useGameState"
 import Landscape from "./landscape";
 import { tokens } from "../utils/tokens";
 import Token from "../components/token/token";
@@ -9,7 +9,7 @@ export default function TheGambler() {
   const { phase, token, playerHealth, animations } = gameState;
   const tokenRef = useRef(false);
   
-  const playerEffect = tokens[token];
+  const playerEffect = token !== null ? tokens[token] : undefined;
 
   useEffect(() => {
     if (phase === "resolution") tokenRef.current = false;
@@ -28,7 +28,9 @@ export default function TheGambler() {
   }, [phase]);
 
   async function applyTokenEffects(phase: phaseType) {
-    const newGameState = playerEffect.gameState(gameState);
+    if (!playerEffect) return;
+    let newGameState = {} as Partial<GameStateType>;
+    newGameState= playerEffect.gameState(gameState);
 
     if (!newGameState) return;
     tokenRef.current = true;
@@ -55,13 +57,13 @@ export default function TheGambler() {
     <div
       style={{ 
         position: "relative",
-        height: "100%",
-        width: "100%",
+        height: "100vh",
+        width: "100vw",
         zIndex: "999",
         color: "white",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
       }} 
       className={ `player-${ animations.player }` }
     >

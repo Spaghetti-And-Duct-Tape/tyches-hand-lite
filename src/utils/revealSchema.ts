@@ -14,15 +14,15 @@ export function revealSchema(round: number) {
       return {
         dialogueBox: 0,
         daimon: 1,
-        table: 999,
-        healthBars: 999
+        table: 1,
+        healthBars: 1
       }
     case 5:
       return {
         dialogueBox: 0,
-        daimon: 5,
-        table: 999,
-        healthBars: 999
+        daimon: 4,
+        table: 5,
+        healthBars: 5
       }
   };
 };
