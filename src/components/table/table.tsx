@@ -1,6 +1,6 @@
-import { useGameState } from "../../composables/useGameState";
+import { useGameState } from "../../composables/useGameState"
 import HandleCards from "../card/handleCards";
-import WoodenPanel from "../dialogueBox/woodenPanels";
+import WoodenPanel from "../dialogue/woodenPanel";
 import "./table.css";
 
 export default function Table() {
@@ -9,25 +9,25 @@ export default function Table() {
   const { table } = visibility;
 
   return (
-    <div 
+    <div
       className="table transition-opacity"
       style={{
         display: "flex",
         justifyContent: "center",
-        width: "100%", 
-        opacity: table ? "1" : "0" 
+        width: "100%",
+        opacity: table ? "1" : "0"
       }}
     >
-      <div 
+      <div
         className="table-container"
         style={{
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "center"
         }}
       >
-        <div 
+        <div
           className="table-surface"
           style={{
             position: "relative",
@@ -36,7 +36,7 @@ export default function Table() {
             flexGrow: "1",
             justifyContent: "center",
             alignItems: "center",
-            height: "min(calc((65vw * 9 / 16)), (65vh)",
+            height: "min(calc(65vw * 9/16), 65vh)",
             paddingBottom: "2vw"
           }}
         >

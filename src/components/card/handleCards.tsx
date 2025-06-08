@@ -1,25 +1,82 @@
 import { useEffect } from "react";
-import { useGameState } from "../../composables/useGameState";
+import { useGameState } from "../../composables/useGameState"
+import { cardTotal, emptyCard } from "../../utils/cards";
+import { effectCardDelay, standardCardDelay, wait } from "../../utils/utils";
+import usePlayerActions from "../../composables/usePlayerActions";
 import PerspectiveCards from "./perspectiveCards";
-import { emptyCard } from "../../utils/cards";
 import CardCounter from "./cardCounter";
 
 export default function HandleCards() {
-  const { gameState, gameDispatch, drawPlayerCards, drawDaimonCards } = useGameState();
+  const { gameState, gameDispatch } = useGameState();
   const { phase, playerHand, daimonHand } = gameState;
-    const handleDaimonHand = daimonHand.length === 1 ? [...daimonHand, emptyCard] : daimonHand;
+  const { drawPlayerCard, drawDaimonCard } = usePlayerActions();
+  const handleDaimonHand = daimonHand.length === 1 ? [...daimonHand, emptyCard] : daimonHand;
 
   useEffect(() => {
-    if (phase === "draw") startHand();
-  }, [phase]);
+    if (phase !== "draw") return;
+    handleDrawPhase();
+  }, [phase, playerHand, daimonHand]);
 
-  async function startHand() {
-    await drawPlayerCards(2);
-    await drawDaimonCards(1);
+  
+  useEffect(() => {
+    if (phase !== "player-doubles") return;
+    player2xCard()
+  }, [phase])
+
+  useEffect(() => {
+    if (phase !== "daimon-turn") return;
+    handleDaimonPhase();
+  }, [phase, daimonHand]);
+
+  async function handleDrawPhase() {
+    const isFirstCard = playerHand.length === 0;
+    const isSecondCard = playerHand.length === 1;
+    const isDaimonDraw = playerHand.length === 2;
+    const transitionPhase = daimonHand.length === 1;
+    
+    const lastCardEffect = playerHand[playerHand.length - 1]?.effect ?? "Standard";
+    const delay = lastCardEffect === "Standard" ? standardCardDelay : effectCardDelay;
+    
+    if (isFirstCard) {
+      drawPlayerCard();
+    } else if (isSecondCard) {
+      await wait(delay);
+      drawPlayerCard();
+    } else if (transitionPhase) {
+      await wait(100);
+      gameDispatch({ type: "SET_PHASE", 
+        payload: {
+          phase: "hand-dialogue"
+      }})
+    } else if (isDaimonDraw) {
+      await wait(delay);
+      drawDaimonCard();
+    } 
+  };
+
+  async function handleDaimonPhase() {
+    const isSecondCard = daimonHand.length === 1;
+    const delay = isSecondCard ? 0 : 300;
+    const daimonTotal = cardTotal(daimonHand).sum
+
+    if (daimonTotal < 17) {
+      await wait(delay);
+      return drawDaimonCard();
+    };
+
+    gameDispatch({ type: "SET_PHASE",
+      payload: {
+        phase: "apply-daimon-effect"
+    }});
+  };
+
+  async function player2xCard() {
+    await drawPlayerCard();
+
     gameDispatch({ type: "SET_PHASE", 
       payload: {
-        phase: "hand-dialogue"
-    }});
+        phase: "daimon-turn"
+    }})
   };
 
   return (
@@ -34,7 +91,7 @@ export default function HandleCards() {
           hand={ handleDaimonHand }
           owner="daimon"
         />
-        <CardCounter
+        <CardCounter 
           hand={ handleDaimonHand }
           owner="daimon"
         />
@@ -51,7 +108,7 @@ export default function HandleCards() {
         />
         <CardCounter
           hand={ playerHand }
-          owner="player"
+          owner="player" 
         />
       </div>
     </>

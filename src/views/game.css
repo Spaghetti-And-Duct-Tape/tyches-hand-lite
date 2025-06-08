@@ -13,7 +13,7 @@
     rgba(255, 215, 100, 0.3) 85%,
     rgba(255, 200, 50, 0.5) 100%
   );
-  animation: pulse-glow 1.6s ease-in-out infinite;
+  animation: pulse-glow 1.0s ease-in-out infinite;
   opacity: 0.5;
 }
 

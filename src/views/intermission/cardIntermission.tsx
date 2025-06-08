@@ -3,6 +3,7 @@ import type { CardType } from "../../utils/cards";
 import IntermissionDescription from "./intermissionDescription";
 import Card from "../../components/card/card";
 import BloodButton from "../../components/bloodButton/bloodButton";
+import type { ItemKey } from "./intermission";
 
 export default function CardIntermission({
   cards,
@@ -11,12 +12,9 @@ export default function CardIntermission({
   setItem,
 } : {
   cards: CardType[] | undefined;
-  items: {
-    deck: CardType[];
-    token: number | null;
-  };
+  items: ItemKey;
   discardCards: CardType[];
-  setItem: (key: string, value: CardType[] | number) => void;
+  setItem: <K extends keyof ItemKey>(key: K, value: ItemKey[K]) => void;
 }) {
 
   if (!cards) return;
@@ -62,7 +60,7 @@ export default function CardIntermission({
       >
         <p>
           { toggleCards 
-            ? "Three cards have appeared before you, you may choose to add them to your deck."
+            ? "Three cards lie before you, tap to add them to your deck."
             : "Tyche demands balance. Choose " + cardsToAdd.length + " cards to remove."
           }
         </p>
@@ -82,7 +80,6 @@ export default function CardIntermission({
           cards={ cards }
           pickedCards={ cardsToAdd }
           selectCard={ selectedNewCards } 
-          maxCardsToPick={ 3 }
         />
       ) : (
         <CardSection
@@ -94,7 +91,7 @@ export default function CardIntermission({
       )}
       <div
         style={{
-          margin: "20px 5px",
+          margin: "20px 5px 0px 5px",
           display: "flex",
           justifyContent: "space-evenly",
           gridColumn: "1 / span 4"
@@ -103,7 +100,7 @@ export default function CardIntermission({
         <BloodButton
           action={ toggleCards ? () => setToggleCards(false) : setDeck }
         >
-          { toggleCards ? "Equip Cards" : "Discard Cards" }
+          { toggleCards ? `Equip (${ cardsToAdd.length }) Cards` : "Discard Cards" }
         </BloodButton>
       </div>
     </>
@@ -118,7 +115,7 @@ function CardSection({
 } : {
   cards: CardType[];
   pickedCards: CardType[];
-  maxCardsToPick: number;
+  maxCardsToPick?: number;
   selectCard: (card: CardType) => void;
 }) {
   return (
@@ -157,13 +154,15 @@ function CardSection({
           marginLeft: "5px"
         }}
       >
-        <h2
-          style={{ 
-            color: pickedCards.length !== maxCardsToPick ? "red" : "" 
-          }}
-        >
-          { pickedCards.length } / { maxCardsToPick }
-        </h2>
+        { maxCardsToPick &&  
+          <h2
+            style={{ 
+              color: pickedCards.length !== maxCardsToPick ? "red" : "" 
+            }}
+          >
+            { pickedCards.length } / { maxCardsToPick }
+          </h2>
+        }
       </div>
     </>
   )

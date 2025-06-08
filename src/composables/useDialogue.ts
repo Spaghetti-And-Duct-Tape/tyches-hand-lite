@@ -1,18 +1,18 @@
 import { useRef, useState } from "react";
 
-interface useDialogueReturn {
+interface useDialogueType {
   index: number;
   currentLine: string;
   isDone: boolean;
   advance: () => void;
   reset: () => void;
-}
+};
 
 export default function useDialogue(
-  lines: string[] = [], 
+  lines: string[] = [],
   onComplete?: () => void
-): useDialogueReturn {
-  const lastIndex: number = lines.length - 1;
+): useDialogueType {
+  const lastIndex = lines.length - 1;
   const [index, setIndex] = useState<number>(0);
   const completed = useRef<boolean>(false);
 
@@ -28,17 +28,17 @@ export default function useDialogue(
   };
 
   function reset() {
-    completed.current = false;
+    completed.current =false;
     setIndex(0);
   };
 
   const currentLine = lines[index] || "";
 
   return {
-    index, 
+    index,
     currentLine,
     isDone: index > lastIndex,
     advance,
     reset
-  }
+  };
 };

@@ -14,7 +14,7 @@ export default function StartScreen() {
       >
         <img
           style={{ 
-            width: "min(50vw, calc(50vh * 16 / 9))" 
+            width: "min(40vw, calc(50vh * 16 / 9))" 
           }} 
           src={ logo } 
         />

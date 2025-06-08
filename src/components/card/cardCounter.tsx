@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react";
-import { useGameState } from "../../composables/useGameState";
-import type { CardType } from "../../utils/cards";
-import { cardTotal } from "../../utils/utils";
+import { useGameState } from "../../composables/useGameState"
+import { cardTotal, type CardType } from "../../utils/cards";
 import NumberTicker from "../healthBars/numberTicker";
 import usePlayerActions from "../../composables/usePlayerActions";
 
-export default function CardCounter({ 
-  hand,
-  owner 
-} : { 
-  hand: CardType[];
+export default function CardCounter({
+  owner,
+  hand
+} : {
   owner: string;
+  hand: CardType[];
 }) {
   const { gameState } = useGameState();
+  const { resolveHand } = usePlayerActions();
   const [value, setValue] = useState(0);
   const isResolving = gameState.phase === "resolution";
   const isWinner = gameState.handWinner === owner || gameState.handWinner === "push";
   const isLoser = gameState.handWinner !== null && !isWinner;
   const total = isResolving ? cardTotal(hand).sum : 0;
-  const { resolveHand } = usePlayerActions();
 
   useEffect(() => {
     if (isResolving) resolveHand();

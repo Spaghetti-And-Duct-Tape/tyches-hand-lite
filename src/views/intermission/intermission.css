@@ -1,5 +1,4 @@
 .intermission-layout {
-  width: 100%;
   opacity: 0;
   animation: 
     fade-in 1s ease-in-out forwards,
@@ -16,4 +15,13 @@
 
 .intermission-card-clicker {
   z-index: 100;
+}
+
+.intermission-description-container .wooden-panel-container .intermission-description { 
+  max-height: 10dvw;
+  overflow-y: auto;
+}
+
+.token-description.intermission-description-container .wooden-panel-container .intermission-description {
+  max-height: 100%;
 }
