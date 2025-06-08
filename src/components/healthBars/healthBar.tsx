@@ -1,6 +1,6 @@
 import { useState } from "react";
-import WoodenPanel from "../dialogueBox/woodenPanels"
 import NumberTicker from "./numberTicker"
+import WoodenPanel from "../dialogue/woodenPanel";
 
 export default function HealthStatus({
   name,
@@ -15,7 +15,8 @@ export default function HealthStatus({
 }) {
   const playerMaxHealth: number = maxHealth;
   const healthBarWidth: number = (health / playerMaxHealth) * 100;
-  const [value, setValue] = useState(health); 
+  const [healthValue, setHealthValue] = useState(health); 
+  const [maxHealthValue, setMaxHealthValue] = useState(maxHealth);
 
   return(
     <div className="health-status-container">
@@ -64,9 +65,14 @@ export default function HealthStatus({
                     <NumberTicker
                       replacement={ health }
                       duration={ 1000 } 
-                      value={ value } 
-                      setValue={ setValue } 
-                    /> / { maxHealth }
+                      value={ healthValue } 
+                      setValue={ setHealthValue } 
+                    /> / <NumberTicker 
+                      replacement={ maxHealth }
+                      duration={ 1000 }
+                      value={ maxHealthValue }
+                      setValue={ setMaxHealthValue }
+                    />
                   </div>
                 }
               </div>

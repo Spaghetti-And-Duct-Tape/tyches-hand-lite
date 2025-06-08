@@ -1,4 +1,4 @@
-import WoodenPanel from "../../components/dialogueBox/woodenPanels";
+import WoodenPanel from "../../components/dialogue/woodenPanel";
 
 export default function IntermissionDescription({ 
   item 
@@ -16,11 +16,14 @@ export default function IntermissionDescription({
   return (
     <WoodenPanel>
       <div 
-        className="inner-content"
+        style={{
+          width: "100%"
+        }}
+        className="inner-content intermission-description"
       >
         <h2
           style={{
-            margin: "5px",
+            margin: "0",
             textAlign: "center"
           }}
         >
@@ -29,18 +32,18 @@ export default function IntermissionDescription({
         <p
           style={{
             margin: "0",
+            fontStyle: "italic",
             padding: "10px"
           }}
         >
-          { description }
+          { effectDescription }
         </p>
         <p
           style={{ 
             margin: "0",
-            fontStyle: "italic" 
           }}
         >
-          { effectDescription }
+          { description }
         </p>
       </div>
     </WoodenPanel>

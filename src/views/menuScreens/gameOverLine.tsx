@@ -18,8 +18,9 @@ export default function GameOverLine({
         <span
           key={ index }
           className="loading-text"
-          style={{ "--delay": `${ index * 0.3 }s` }}
-          data-text={ letter }
+          style={{
+            animationDelay: `${ index * 0.3}s`
+          }}
         >
           { letter }
         </span>

@@ -1,6 +1,6 @@
 import ActionButton from "../components/actionButtons/actionButton";
 import Daimon from "../components/daimon/daimon";
-import DialogueManager from "../components/dialogueBox/dialogueManager";
+import DialogueManager from "../components/dialogue/dialogueManager";
 import HealthBars from "../components/healthBars/healthBars";
 import Table from "../components/table/table";
 
@@ -14,7 +14,7 @@ export default function GameBoard() {
         position: "relative",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "center"
       }}
     >
       <Daimon />

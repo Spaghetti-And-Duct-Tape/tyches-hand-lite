@@ -6,7 +6,7 @@
 
 .game-over-line-container {
   opacity: 0;
-  height: min(10vw, calc(7vh * 16 / 9));
+  height: min(7vw, calc(5vh * 16 / 9));
   animation: fade-in 8s ease-in-out forwards;
 }
 
@@ -20,4 +20,3 @@
   animation: float 5s ease-in-out infinite;
   animation-delay: var(--delay);
 }
-

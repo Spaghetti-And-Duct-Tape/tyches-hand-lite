@@ -1,5 +1,6 @@
 import { useGameState } from "../../composables/useGameState";
 import { daimons } from "../../daimons";
+import ApplyToken from "../token/applyToken";
 import HealthStatus from "./healthBar";
 import WagerBottle from "./wagerBottle";
 
@@ -12,7 +13,7 @@ export default function HealthBars() {
     round,
     daimonHealth, 
     daimonMaxHealth,
-    visibility
+    visibility,
   } = gameState;
 
   return (
@@ -31,7 +32,7 @@ export default function HealthBars() {
             name={ daimons[daimon].name }
             health={ daimonHealth }
             maxHealth={ daimonMaxHealth }
-            isPlayer={ false }
+            isPlayer={ true }
           />
         </div>
         <div
@@ -44,13 +45,21 @@ export default function HealthBars() {
             opacity: visibility.healthBars ? "1" : "0"
           }}
         >
-          
-          <HealthStatus
-            name={ `Trial: ${ round }` }
-            health={ playerHealth }
-            maxHealth={ playerMaxHealth }
-            isPlayer={ true }
-          />
+          <div
+            className="player-hud"
+            style={{
+              display: "flex",
+              alignItems: "end"
+            }}
+          >
+            <HealthStatus
+              name={ `Trial: ${ round }` }
+              health={ playerHealth }
+              maxHealth={ playerMaxHealth }
+              isPlayer={ true }
+            />
+            <ApplyToken />
+          </div>
         </div>
           <WagerBottle />
         </>

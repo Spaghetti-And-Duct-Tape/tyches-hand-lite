@@ -1,26 +1,31 @@
 import { useEffect, useRef } from "react";
-import { useGameState, type playerActionsType } from "../../composables/useGameState";
+import { useGameState, type PlayerActionsType } from "../../composables/useGameState"
 import BloodButton from "../bloodButton/bloodButton";
-import { tutorialPlayerActions } from "../../utils/utils";
 import usePlayerActions from "../../composables/usePlayerActions";
 
 export default function ActionButton() {
-  const { gameState, gameDispatch, drawPlayerCards } = useGameState();
+  const { gameState, gameDispatch } = useGameState();
   const { 
-    phase, 
-    round, 
-    playerHealth, 
-    playerHand, 
+    startWager,
+    playerStands, 
+    player2x,
+    playerSurrenders,
+    drawPlayerCard, 
+    tutorialPlayerActions 
+  } = usePlayerActions();
+  const {
+    phase,
+    round,
+    playerActions,
+    playerHealth,
+    playerHand,
     wager,
-    deck, 
-    playerActions 
   } = gameState;
-  const { startWager, daimonResolves, playerSurrenders, player2x } = usePlayerActions();
   const buttonRef = useRef(false);
 
   useEffect(() => {
     buttonRef.current = false;
-    let buttonMap: playerActionsType[] = [];
+    let buttonMap: PlayerActionsType[] = [];
 
     if (phase === "wager") buttonMap = ["Wager"];
     if (phase === "player-turn") buttonMap = availablePlayerActions();
@@ -30,12 +35,13 @@ export default function ActionButton() {
         playerActions: buttonMap
       }
     });
+
   }, [phase, playerHand]);
 
-  function availablePlayerActions(): playerActionsType[] {
-    if (round === 1) return tutorialPlayerActions(deck);
-    
-    const actions: playerActionsType[] = ["Hit", "Stand"];
+  function availablePlayerActions(): PlayerActionsType[] {
+    if (round === 1) return tutorialPlayerActions(gameState.deck);
+
+    const actions: PlayerActionsType[] = ["Hit", "Stand"];
 
     if (gameState.token === 1) actions.push("2x");
     if (playerHand.length > 2) return actions;
@@ -47,19 +53,19 @@ export default function ActionButton() {
     return actions;
   };
 
-  const buttonActionsMap = {
+  const buttonActionsMap: Record<PlayerActionsType, () => void> = {
     "Wager": () => startWager(),
-    "Hit": () => drawPlayerCards(1),
-    "Stand": () => daimonResolves(),
-    "Surr": () => playerSurrenders(),
+    "Stand": () => playerStands(),
+    "Hit": () => drawPlayerCard(),
     "2x": () => player2x(),
-  }
+    "Surr": () => playerSurrenders()
+  };
 
   function handleButtonClick(name: string) {
     if (buttonRef.current) return;
     buttonRef.current = true;
 
-    const fn = buttonActionsMap[name];
+    const fn = buttonActionsMap[name as PlayerActionsType];
     if (fn) fn();
   };
 
@@ -70,21 +76,21 @@ export default function ActionButton() {
         position: "absolute",
         bottom: "5%",
         right: "2%",
-        zIndex: "1",
+        zIndex: "1"
       }}
     >
       { playerActions.map((button, index) => {
         //Makes the bottom button appear first
         const inverseIndex = playerActions.length - index;
-
-        return (
-          <div 
+        
+        return(
+          <div
             className="draw-button-animation"
             key={ button }
             style={{
               margin: "5px",
               transform: `translateY( ${ 50 * (index + 1) }px)`,
-              animationDelay: `${ inverseIndex * 0.1 }s` 
+              animationDelay: `${ inverseIndex * 0.1 }s`
             }}
           >
             <BloodButton

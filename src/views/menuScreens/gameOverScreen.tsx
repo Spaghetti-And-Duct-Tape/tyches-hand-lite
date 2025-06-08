@@ -1,4 +1,3 @@
-
 import { useGameState } from "../../composables/useGameState";
 import { gameOverText } from "../../utils/gameOverText";
 import GameOverLine from "./gameOverLine";
@@ -6,6 +5,7 @@ import GameOverLine from "./gameOverLine";
 export default function GameOverScreen() {
   const { gameState } = useGameState();
   const { deck } = gameState;
+
   
   const gameEnding = selectGameEnding();
 
@@ -21,6 +21,7 @@ export default function GameOverScreen() {
 
     return gameOverText[endingIndex];
   };
+
 
   return (
     <main

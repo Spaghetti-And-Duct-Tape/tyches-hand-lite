@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import StartScreen from "./startScreen";
 import BloodButton from "../../components/bloodButton/bloodButton";
-import GameOverScreen from "./gameOverScreen";
-import "./menuScreen.css";
 import { useGameState } from "../../composables/useGameState";
+import GameOverScreen from "./gameOverScreen";
+import "./menuScreens.css";
+import StartScreen from "./startScreen";
 
 export default function MenuScreens() {
   const { gameState, gameDispatch } = useGameState();
@@ -17,8 +17,8 @@ export default function MenuScreens() {
     }, 1500);
 
     return () => clearTimeout(introDelay);
-  }, []);
-  
+  }, [])
+
   return (
     <div
       style={{
@@ -33,51 +33,54 @@ export default function MenuScreens() {
       ) : (
         <StartScreen />
       )}
-
       <div
-        className="start-button-container transition-opacity"
+        className="transition-opacity"
         style={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "space-evenly",
           opacity: playButton ? "1" : "0",
-          zIndex: "1"
+          zIndex: "1",
+          width: "100%"
         }}
       >
-        <BloodButton
-          disabled={ !playButton }
-          action={ () => gameDispatch({ type: "START_GAME" }) }
-        >
-          Play
-        </BloodButton>
-        <BloodButton
-          disabled={ !playButton }
-          action={ () => gameDispatch({ type: "START_GAME", 
-            payload: {
-              round: 1
-          }})}
-        >
-          Skip Tutorial
-        </BloodButton>
-      </div>
-
-      { gameOver &&
-        <small
+        <div
+          className="start-button-container"
           style={{
-            position: "absolute",
-            bottom: "0",
-            left: "50%",
-            transform: "translateX(-50%)",
-            opacity: playButton ? "1" : "0",
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
           }}
-        >Held together by: <a
-            href="https://github.com/Spaghetti-And-Duct-Tape/tyches-hand-lite"
+        >
+          <BloodButton
+            disabled={ !playButton }
+            action={ () => gameDispatch({ type: "START_GAME" })}
           >
-            Spaghetti and Duct Tape
-          </a>
-        </small>
-      }
-
+            Play
+          </BloodButton> 
+          <BloodButton
+            disabled={ !playButton }
+            action={ () => gameDispatch({ type: "START_GAME",
+              payload: {
+                phase: "intermission"
+              }
+            })}
+          >
+            Skip Tutorial
+          </BloodButton> 
+        </div>
+        { gameOver &&
+          <small
+            style={{
+              display: "flex",
+              justifyContent: "center"
+            }}
+          >
+            Held together by: <a
+              href="https://github.com/Spaghetti-And-Duct-Tape/tyches-hand-lite"
+            >
+              Spaghetti and Duct Tape
+            </a>
+          </small>
+        }
+      </div>
     </div>
   )
-}
+};

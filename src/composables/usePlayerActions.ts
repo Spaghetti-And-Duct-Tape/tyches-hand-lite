@@ -1,139 +1,282 @@
-import type { CardType } from "../utils/cards";
-import { calculateWager } from "../utils/gameCalculations";
-import { cardTotal, handWinner, wait } from "../utils/utils";
-import { useGameState } from "./useGameState";
+import { shuffleCards, type CardType } from "../utils/cards";
+import { calculateHealth, calculateWager, effectCardDelay, handWinner, standardCardDelay, wait } from "../utils/utils";
+import { useGameState, type GameStateType, type PlayerActionsType } from "./useGameState";
 
 export default function usePlayerActions() {
-  const { gameState, gameDispatch, dealDamage, drawPlayerCards, setAnimation } = useGameState();
-  const {
+  const { gameState, gameDispatch, endRound } = useGameState();
+  const { 
     playerHealth,
     daimonHealth,
-    visibility,
+    visibility, 
     playerHand,
     daimonHand,
     hand,
-    deck,
     wager
   } = gameState;
 
   async function startWager() {
+    //Activates healthbars
     if (!visibility.healthBars) {
-      gameDispatch({ 
-        type: "SET_VISIBILITY", 
+      gameDispatch({ type: "SET_VISIBILITY",
         payload: {
           ...gameState.visibility,
           healthBars: true
-        }});
+        }
+      });
+
       await wait(1000);
-    }
-    
+    };
+
     const wage = calculateWager(hand, playerHealth);
-    const handleHealths = await dealDamage(
-      playerHealth - wage,
-      daimonHealth - wage,
-      wage * 2
-    );
+    
+    if (daimonHealth - wage <= 0) return endRound();
 
-    if (handleHealths) return;
+    gameDispatch({ type: "SET_HEALTHVALUES", 
+      payload: {
+        playerHealth: calculateHealth(playerHealth, gameState.playerMaxHealth, -wage),
+        daimonHealth: calculateHealth(daimonHealth, gameState.daimonMaxHealth, -wage),
+        wager: wage * 2,
+        playerAnimation: "injured",
+        daimonAnimation: "injured"
+    }});
 
-    gameDispatch({ type: "SET_PHASE", 
+    await wait(500);
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        target: "daimon",
+        animation: "idle"
+      }
+    });
+
+    await wait(400);
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        target: "player",
+        animation: "idle"
+      }
+    });
+
+    await wait(500);
+    
+
+    gameDispatch({ type: "SET_PHASE",
       payload: {
         phase: "draw"
       }
-    });
+    })
+  };
+
+  function playerStands() {
+    gameDispatch({ type: "SET_PHASE",
+      payload: {
+        phase: "daimon-turn"
+    }});
+  };
+
+  async function drawDaimonCard() {
+    let deck = [...gameState.deck];
+    let discardPile = [...gameState.discardPile];
+
+    //Reshuffle deck if needed
+    if (deck.length === 0) {
+      deck = shuffleCards(discardPile, gameState.round);
+      discardPile = [];
+    };
+
+    const drawnCard = deck[deck.length - 1];
+    if (!drawnCard) return;
+
+    const updatedDaimonHand = [...gameState.daimonHand, drawnCard];
+
+    gameDispatch({ type: "DRAW_CARDS",
+      payload: {
+        daimonHand: updatedDaimonHand,
+        deck: deck.slice(0, -1),
+        discardPile: discardPile,
+    }});
   };
 
   async function playerSurrenders() {
     const quarterWager = Math.floor(wager / 4);
-    const trQtWager = Math.floor(wager * 3 /4);
-    await dealDamage(
-      playerHealth + quarterWager,
-      daimonHealth,
-      trQtWager,
-      true,
-      false
-    );
-
-    gameDispatch({ type: "DECLARE_WINNER", 
+    const threeQuartWager = Math.floor(wager * 3 / 4);
+    gameDispatch({type: "SET_HEALTHVALUES",
       payload: {
-        winner: "daimon"
+        playerHealth: calculateHealth(playerHealth, gameState.playerMaxHealth, quarterWager),
+        daimonHealth: daimonHealth,
+        wager: threeQuartWager,
+        playerAnimation: "healed"
+    }});
+
+    await wait(900);
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        target: "player",
+        animation: "idle"
       }
     });
+    await wait(500);
 
-    await setAnimation("cards", "discard", 1700);
-
-    gameDispatch({ type: "RESOLVE_HAND" });
+    gameDispatch({ type: "DECLARE_WINNER",
+      payload: {
+        winner: "daimon"
+    }});
+    
+    await wait(1500);
+    gameDispatch({ type: "RESOLVE_HAND" })
   };
 
   async function player2x() {
-    gameDispatch({ type: "SET_PHASE",
-      payload: "player2x"
-    })
     const wage = wager / 2;
-    const handleHealths = await dealDamage(
-      playerHealth - wage,
-      daimonHealth - wage,
-      wager * 2,
-      true,
-      false
-    );
+    
+    if (daimonHealth - wage <= 0) return endRound();
+    
+    gameDispatch({ type: "SET_HEALTHVALUES", 
+      payload: {
+        playerHealth: calculateHealth(playerHealth, gameState.playerMaxHealth, -wage),
+        daimonHealth: calculateHealth(daimonHealth, gameState.daimonMaxHealth, -wage),
+        wager: wage * 4,
+        playerAnimation: "injured",
+        daimonAnimation: "injured"
+    }});
+    
+    await wait(500);
 
-    if (handleHealths) return;
+    //await drawPlayerCard();
 
-    await drawPlayerCards(1);
-    await daimonResolves();
+    
+    gameDispatch({ type: "SET_PHASE",
+      payload: {
+        phase: "player-doubles"
+    }});
   };
 
-  async function daimonResolves() {
-    let drawCount = 1;
-    const startingHand = daimonHand[0];
+  async function drawPlayerCard() {
+    let deck = [...gameState.deck];
+    let discardPile = [...gameState.discardPile];
 
-    while (
-      projectedSum(startingHand, drawCount) < 17 &&
-      drawCount < 12
-    ) {
-      drawCount++;
-      await wait(300);
+    //Reshuffle deck if needed
+    if (deck.length === 0) {
+      deck = shuffleCards(discardPile, gameState.round);
+      discardPile = [];
     };
 
-    gameDispatch({ type: "SET_PHASE",
-      payload: { 
-        phase: "daimon-turn" 
+    const drawnCard = deck[0];
+    if (!drawnCard) return;
+
+    const updatedPlayerHand = [...gameState.playerHand, drawnCard];
+
+    const {
+      newPlayerHealth,
+      newDaimonHealth,
+      playerAnimation,
+      daimonAnimation,
+      postEffectDelay,
+    } = calculateCardEffects(drawnCard, gameState);
+
+    gameDispatch({ type: "DRAW_CARDS",
+      payload: {
+        playerHand: updatedPlayerHand,
+        daimonHealth: calculateHealth(newDaimonHealth, gameState.daimonMaxHealth),
+        playerHealth: calculateHealth(newPlayerHealth, gameState.playerMaxHealth),
+        discardPile: discardPile,
+        deck: deck.slice(1),
+        playerAnimation: playerAnimation,
+        daimonAnimation: daimonAnimation,
+    }});
+
+    await wait(postEffectDelay);
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        target: "player",
+        animation: "idle"
       }
     });
-    
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        target: "daimon",
+        animation: "idle"
+      }
+    });
   };
 
   async function resolveHand() {
-    const maxCardLength = Math.max(playerHand.length, daimonHand.length);
-    await setAnimation("cards", "sway", 700 * maxCardLength);
+    const maxcardLength = Math.max(playerHand.length, daimonHand.length);
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        target: "cards",
+        animation: "sway"
+    }});
+
+    await wait(700 * maxcardLength);
 
     let winner = handWinner(playerHand, daimonHand);
-    gameDispatch({ type: "DECLARE_WINNER", 
+    gameDispatch({ type: "DECLARE_WINNER",
       payload: {
-        winner: winner
-      }
-    });
+        winner
+    }});
 
-    setAnimation("cards", "discard", 1700);
     await wait(1500);
-
-    
     gameDispatch({ type: "RESOLVE_HAND" })
-  }
-  
-  function projectedSum(startingHand: CardType, n: number) {
-    const extra = deck.slice(-n);
-    const hand = [startingHand, ...extra];
-    gameDispatch({ type: "DRAW_DAIMON_CARD" });
-    return cardTotal(hand).sum;
+
+
+  };
+
+  function calculateCardEffects(card: CardType, state: GameStateType) {
+    let newPlayerHealth = state.playerHealth;
+    let newDaimonHealth = state.daimonHealth;
+    let playerAnimation = "idle";
+    let daimonAnimation = "idle";
+    let postEffectDelay = standardCardDelay;
+
+    switch (card.effect) {
+      case "Bloodstained":
+        newDaimonHealth += card.value;
+        daimonAnimation = "injured";
+        postEffectDelay = effectCardDelay;
+        break;
+      case "Charred":
+        newPlayerHealth += card.value;
+        playerAnimation = "healed";
+        postEffectDelay = effectCardDelay;
+        break;
+    }
+
+    return {
+      newPlayerHealth,
+      newDaimonHealth,
+      playerAnimation,
+      daimonAnimation,
+      postEffectDelay,
+    };
+  };
+
+  function tutorialPlayerActions(deck: CardType[]): PlayerActionsType[] {
+    switch(deck.length) {
+      case 49:
+        return ["Hit"];
+      case 48:
+        return ["Stand"];
+      case 44:
+        return ["Stand"];
+      case 39:
+        return ["Surr"];
+      case 36:
+        return ["2x"];
+      case 31:
+        return ["Stand"];
+      default:
+        return [];
+    }
   };
 
   return {
     startWager,
-    daimonResolves,
-    resolveHand,
+    playerStands,
     playerSurrenders,
-    player2x
-  }
+    player2x,
+    drawPlayerCard,
+    drawDaimonCard,
+    tutorialPlayerActions, 
+    resolveHand
+  };
 };

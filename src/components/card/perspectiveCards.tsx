@@ -11,8 +11,8 @@ export default function PerspectiveCards({
 }) {
   const { gameState } = useGameState();
   const { animations } = gameState;
-  
-  return(
+
+  return (
     <div
       className={ `${ owner }-card-stack ${ animations.cards }` }
       style={{
@@ -22,12 +22,12 @@ export default function PerspectiveCards({
     >
       { hand.length > 0 &&
         hand.map((card, index) => (
-          <div 
+          <div
             key={ owner === "player" ? index : index + 10 }
-            className={ `overlap-cards` }
-            style={{ 
+            className="overlap-cards"
+            style={{
               width: "fit-content",
-              animationDelay: card.id === 999 ? "0.3s" : "", 
+              animationDelay: card.id === 999 ? "0.3s" : "",
             }}
           >
             <div

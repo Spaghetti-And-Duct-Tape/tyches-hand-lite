@@ -1,4 +1,4 @@
-import type { TokenType } from "../../utils/tokens";
+import type { TokenType } from "../../utils/token";
 import "./token.css";
 
 export default function Token({

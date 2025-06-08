@@ -1,18 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import { useGameState } from "../../composables/useGameState";
 import { calculateCardWeights, cardInventory, randomCardPicker, shuffleCards, type CardType } from "../../utils/cards";
-import { tokens } from "../../utils/tokens";
-import WoodenPanel from "../../components/dialogueBox/woodenPanels";
+import { tokens } from "../../utils/token";
+import WoodenPanel from "../../components/dialogue/woodenPanel";
 import "./intermission.css";
 import TokenIntermission from "./tokenIntermission";
 import CardIntermission from "./cardIntermission";
 
-type PhasesType = "Dark" | "Token" | "Cards"
+export type IntermissionPhasesType = "Dark" | "Token" | "Cards";
+export type ItemKey = {
+  deck: CardType[];
+  token: number | null;
+};
 
 export default function Intermission() {
   const { gameState, gameDispatch } = useGameState();
-  const [phase, setPhase] = useState<PhasesType>("Dark");
-  const items = {
+  const [phase, setPhase] = useState<IntermissionPhasesType>("Dark");
+  const currentItems: ItemKey = {
     deck: gameState.deck,
     token: gameState.token
   };
@@ -25,7 +29,7 @@ export default function Intermission() {
 
     setTimeout(() => {
       setPhase("Token");
-    }, 1000);
+    }, 500);
   }, [phase]);
 
   useEffect(() => {
@@ -35,18 +39,18 @@ export default function Intermission() {
     if (phase === "Cards" && !cards) return gameDispatch({ type: "START_GAME" });
   }, [phase]);
 
-  function setItem(key: string, value: CardType[] | number) {
-    items[key] = value;
+  function setItem<K extends keyof ItemKey>(key: K, value: ItemKey[K]) {
+    currentItems[key] = value;
 
     gameDispatch({
       type: "EQUIP_ITEMS",
       payload: {
-        ...items
+        ...currentItems
       }
     });
     
     key === "deck" ? gameDispatch({ type: "START_GAME" }) : setPhase("Cards");
-  }
+  };
 
   function randomToken() {
     const discoverableTokens = tokens.filter(token => token.id !== gameState.token);
@@ -58,7 +62,7 @@ export default function Intermission() {
   };
 
   function randomCards() {
-    const discoverableCards = cardInventory.filter(card => !items.deck.includes(card));
+    const discoverableCards = cardInventory.filter(card => !currentItems.deck.includes(card));
 
     if (discoverableCards.length === 0) return;
   
@@ -70,8 +74,8 @@ export default function Intermission() {
     const rankWeights = () => 1;
     const suitWeights = () => 1;
   
-    const weights = calculateCardWeights(discoverableCards, rankWeights, effectWeights, suitWeights);
-    return randomCardPicker(discoverableCards, weights, 3);
+    const weights = calculateCardWeights(discoverableCards, {rankWeights, effectWeights, suitWeights});
+    return randomCardPicker(discoverableCards, weights, 5);
   };
 
   if (phase === "Dark") return;
@@ -83,7 +87,7 @@ export default function Intermission() {
       { phase === "Token" &&
         <TokenIntermission
           token={ token }
-          items={ items }
+          items={ currentItems }
           setItem={ setItem } 
           setPhase={ setPhase }
         />
@@ -92,7 +96,7 @@ export default function Intermission() {
         <CardIntermission
           cards={ cards }
           discardCards={ discardCards }
-          items={ items }
+          items={ currentItems }
           setItem={ setItem }
         />
       }
@@ -117,7 +121,7 @@ function IntermissionLayout({
         height: "100%",
         width: "100%",
         display: "flex",
-        alignItems: "center"
+        alignItems: "center",
       }}
     >
       <WoodenPanel>

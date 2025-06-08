@@ -1,4 +1,4 @@
-import { useGameState } from "../composables/useGameState"
+import { useGameState } from "../composables/useGameState";
 import GameBoard from "./gameBoard";
 import Intermission from "./intermission/intermission";
 
@@ -6,13 +6,13 @@ export default function Landscape() {
   const { gameState } = useGameState();
   const { phase } = gameState;
   
-  return(
+  return (
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        width: "100dvw",
+        width: " 100dvw",
         height: "100dvh"
       }}
     >
@@ -22,9 +22,8 @@ export default function Landscape() {
           aspectRatio: "16 / 9",
           width: "100%",
           maxHeight: "100dvh",
-          maxWidth: "calc(100dvh * (16/9))",
+          maxWidth: "calc(100dvh * (16 / 9))",
           position: "relative",
-          overflow: "hidden"
         }}
       >
         { phase === "intermission" ? (

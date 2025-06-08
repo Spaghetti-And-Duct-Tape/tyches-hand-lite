@@ -1,18 +1,19 @@
 import { createContext, useContext, useReducer } from "react";
-import { shuffleCards, tutorialDeck, type CardType } from "../utils/cards";
-import { calculateDaimonHealth } from "../utils/gameCalculations";
-import { calculateHealth, cardTotal, wait } from "../utils/utils";
+import { cardTotal, shuffleCards, tutorialDeck, type CardType } from "../utils/cards";
+import { calculateDaimonHealth, calculateHealth, wait } from "../utils/utils";
 
-export type phaseType =
+export type PhaseType = 
   | "intro-dialogue"
   | "wager"
   | "draw"
   | "hand-dialogue"
   | "player-turn"
+  | "player-doubles"
   | "daimon-turn"
   | "apply-token-effect"
   | "apply-daimon-effect"
   | "resolution"
+  | "daimon-dead"
   | "end-dialogue"
   | "intermission";
 
@@ -21,7 +22,6 @@ type VisibilityType = {
   table: boolean;
   healthBars: boolean;
   dialogueBox: boolean;
-  rune: boolean;
 };
 
 type CommonAnimationTypes = "idle" | "injured" | "healed" | "attacked";
@@ -38,17 +38,17 @@ interface AnimationStateType {
   cards: CardOnlyAnimationTypes;
 };
 
-export type playerActionsType = "Wager" | "Hit" | "Stand" | "2x" | "Surr"
+export type PlayerActionsType = "Wager" | "Hit" | "Stand" | "2x" | "Surr";
 
 export interface GameStateType {
   //Game context
-  phase: phaseType;
+  phase: PhaseType;
   started: boolean;
   gameOver: boolean;
   round: number;
   hand: number; //Hands in a round
   daimon: number;
-  playerActions: playerActionsType[];
+  playerActions: PlayerActionsType[];
   handWinner: "player" | "daimon" | "push" | null;
   //Blood pool context
   playerHealth: number;
@@ -66,10 +66,9 @@ export interface GameStateType {
   visibility: VisibilityType;
   //Animations context
   animations: AnimationStateType;
-}
+};
 
-const initialGameState: GameStateType = {
-  phase: "intro-dialogue",
+const initialGameState: GameStateType = {phase: "intro-dialogue",
   started: false,
   gameOver: false,
   round: 0,
@@ -92,7 +91,6 @@ const initialGameState: GameStateType = {
     table: false,
     healthBars: false,
     dialogueBox: false,
-    rune: false
   },
   animations: {
     daimon: "null",
@@ -103,11 +101,10 @@ const initialGameState: GameStateType = {
 
 type GameActionType = 
   | { type: "START_GAME", 
-      payload?: { 
-        round?: number
-    }}
-  | { type: "END_GAME" }
-  | { type: "END_ROUND" }
+      payload?: {
+        phase?: PhaseType
+      }
+    }
   | { type: "SET_ANIMATION", 
       payload: {
         target: "player" | "daimon" | "cards"
@@ -115,20 +112,19 @@ type GameActionType =
       }
     }
   | { type: "SET_VISIBILITY",
-      payload: {
-        visibility: VisibilityType;
-    }}
+      payload: VisibilityType;
+    }
   | { type: "SET_PHASE",
       payload: {
-        phase: phaseType;
+        phase: PhaseType;
       }
     }
   | { type: "PLAYER_ACTIONS",
       payload: {
-        playerActions: playerActionsType[];
+        playerActions: PlayerActionsType[];
       }
     }
-  | { type: "SET_HEALTHVALUES"
+  | { type: "SET_HEALTHVALUES",
       payload: {
         playerHealth: number;
         daimonHealth: number;
@@ -137,8 +133,18 @@ type GameActionType =
         playerAnimation: PlayerAnimationTypes;
       }
     }
-  | { type: "DRAW_PLAYER_CARD" }
-  | { type: "DRAW_DAIMON_CARD" }
+  | { type: "DRAW_CARDS",
+      payload: {
+        playerHealth?: number;
+        daimonHealth?: number;
+        playerHand?: CardType[];
+        daimonHand?: CardType[];
+        discardPile: CardType[];
+        deck?: CardType[];
+        daimonAnimation: DaimonAnimationTypes;
+        playerAnimation: PlayerAnimationTypes;
+      }
+    }
   | { type: "APPLY_EFFECTS",
       payload: {
         gameState: GameStateType
@@ -150,93 +156,80 @@ type GameActionType =
       }
     }
   | { type: "RESOLVE_HAND" }
+  | { type: "END_ROUND" }
   | { type: "EQUIP_ITEMS",
       payload: {
         token: number;
         deck: CardType[];
     }}
+  | { type: "END_GAME" };
 
 function gameReducer(
-  state: GameStateType, 
-  action: GameActionType
+  state: GameStateType,
+  action: GameActionType,
 ): GameStateType {
-  const {
-    phase, 
-    round, 
+  const { 
+    phase,
+    round,
     hand,
-    playerHealth, 
+    playerHealth,
     playerMaxHealth,
     daimonHealth,
     daimonMaxHealth,
     wager,
     playerHand,
     daimonHand,
-    handWinner,
     deck,
     discardPile,
     visibility,
-    animations
+    animations,
+    handWinner
   } = state;
 
-  const deckToDraw = deck.length === 0
-    ? shuffleCards(discardPile, round)
-    : deck;
-  
   const allCards = [
     ...deck,
     ...playerHand,
     ...daimonHand,
     ...discardPile
   ]
-
+  
   switch(action.type) {
     case "START_GAME":
-      const calcDaimonHealth = calculateDaimonHealth(round);
-      const shuffledDeck = shuffleCards(allCards, round);
-      const startingRound = action?.payload?.round ? action.payload.round : round;
-      const daimonIndex = startingRound < 6 ? startingRound : (startingRound - 6) % 5 + 1
 
+      //If player skips tutorial, phase skips to intermission
+      const currentPhase = action.payload?.phase 
+        ? action.payload.phase 
+        : "intro-dialogue"
+        
+      //Determines which daimon is chosen for the round
+      const daimonIndex = round < 6 
+        ? round 
+        : (round - 6) % 5 + 1;
+
+      const daimonStartingHealth = calculateDaimonHealth(round);
+
+      //Returns any blood pool remaining to the player
+      const totalPlayerHealth = playerHealth + wager;
+      
       return {
         ...state,
-        phase: "intro-dialogue",
+        phase: currentPhase,
         started: true,
-        round: startingRound + 1,
+        round: round + 1,
         hand: 0,
         daimon: daimonIndex,
-        playerHealth: calculateHealth(playerHealth + wager, playerMaxHealth),
+        playerHealth: calculateHealth(totalPlayerHealth, 5000, wager),
         playerMaxHealth: 5000,
-        daimonHealth: calcDaimonHealth,
-        daimonMaxHealth: calcDaimonHealth,
+        daimonHealth: daimonStartingHealth,
+        daimonMaxHealth: daimonStartingHealth,
         wager: 0,
         playerHand: [],
         daimonHand: [],
         handWinner: null,
-        deck: shuffledDeck,
         discardPile: [],
+        deck: shuffleCards(allCards, round)
       };
 
-    
-    case "END_ROUND":
-      return {
-        ...state,
-        phase: "end-dialogue",
-        hand: 0,
-        playerHealth: playerHealth + wager,
-        playerMaxHealth: 5000,
-        wager: 0,
-        deck: allCards,
-        playerHand: [],
-        daimonHand: [],
-        discardPile: [],
-      };
-
-    case "END_GAME":
-      return {
-        ...initialGameState,
-        deck: [...deck, ...discardPile],
-        gameOver: true
-      };
-    
     case "SET_ANIMATION":
       return {
         ...state,
@@ -244,8 +237,8 @@ function gameReducer(
           ...animations,
           [action.payload.target]: action.payload.animation
         }
-      }
-
+      };
+    
     case "SET_VISIBILITY":
       return {
         ...state,
@@ -254,7 +247,7 @@ function gameReducer(
           ...action.payload
         }
       };
-
+    
     case "SET_PHASE":
       return {
         ...state,
@@ -270,8 +263,8 @@ function gameReducer(
     case "SET_HEALTHVALUES":
       return {
         ...state,
-        playerHealth: Math.floor(action.payload.playerHealth),
-        daimonHealth: Math.floor(action.payload.daimonHealth),
+        playerHealth: action.payload.playerHealth,
+        daimonHealth: action.payload.daimonHealth,
         wager: action.payload.wager,
         animations: {
           ...animations,
@@ -280,31 +273,27 @@ function gameReducer(
         }
       };
     
-    case "DRAW_PLAYER_CARD":
-      const [nextCard, ...restOfDeck] = deckToDraw;
-      const newPlayerHand = [...playerHand, nextCard];
-      const { isBust } = cardTotal(newPlayerHand);
+    case "DRAW_CARDS":
+      const playerTotal = action.payload.playerHand && cardTotal(action.payload.playerHand);
 
       return {
         ...state,
-        playerHand: newPlayerHand,
-        deck: restOfDeck,
-        discardPile: deck.length === 0 ? [] : discardPile,
+        ...(action.payload.playerHealth && { playerHealth: action.payload.playerHealth }),
+        ...(action.payload.daimonHealth && { daimonHealth: action.payload.daimonHealth }),
+        ...(action.payload.playerHand && { playerHand: action.payload.playerHand }),
+        ...(action.payload.daimonHand && { daimonHand: action.payload.daimonHand }),
+        ...(action.payload.discardPile && { discardPile: action.payload.discardPile }),
+        ...(action.payload.deck && { deck: action.payload.deck }),
         hand: playerHand.length === 0 ? hand + 1 : hand,
-        phase: isBust ? "resolution" : phase
+        phase: playerTotal?.isBust ? "apply-daimon-effect" : phase,
+
+        animations: {
+          ...animations,
+          ...(action.payload.daimonAnimation && { daimon: action.payload.daimonAnimation }),
+          ...(action.payload.playerAnimation && { player: action.payload.playerAnimation }),
+        }
       };
     
-    case "DRAW_DAIMON_CARD":
-      const drawnCard = deckToDraw[deckToDraw.length -1];
-      const newDeck = deckToDraw.slice(0, -1);
-
-      return {
-        ...state,
-        daimonHand: [...daimonHand, drawnCard],
-        deck: newDeck,
-        discardPile: deck.length === 0 ? [] : discardPile,
-      };
-
     case "APPLY_EFFECTS": 
       return {
         ...state,
@@ -314,7 +303,11 @@ function gameReducer(
     case "DECLARE_WINNER":
       return {
         ...state,
-        handWinner: action.payload.winner
+        handWinner: action.payload.winner,
+        animations: {
+          ...animations,
+          cards: "discard"
+        }
       };
     
     case "RESOLVE_HAND":
@@ -346,20 +339,41 @@ function gameReducer(
         daimonHand: [],
         discardPile: nextDiscardPile,
         daimonHealth: Math.floor(nextDaimonHealth),
-        playerHealth: Math.floor(nextPlayerHealth)
+        playerHealth: Math.floor(nextPlayerHealth),
+        animations: {
+          player: "idle",
+          daimon: isDaimonWinner ? "healed" : "idle",
+          cards: "idle"
+        }
       };
 
-    case "EQUIP_ITEMS":
-      return {
-        ...state,
-        token: action.payload.token,
-        deck: action.payload.deck,
-        discardPile: []
-      }
+      case "END_ROUND":
+        return {
+          ...state,
+          phase: "end-dialogue",
+          hand: 0,
+          playerMaxHealth: 5000,
+          deck: allCards,
+          playerHand: [],
+          daimonHand: [],
+          discardPile: [],
+        };
 
-    default:
-      return state;
-  }
+      case "EQUIP_ITEMS":
+        return {
+          ...state,
+          token: action.payload.token,
+          deck: action.payload.deck,
+          discardPile: []
+        };
+
+      case "END_GAME":
+        return {
+          ...initialGameState,
+          deck: [...deck, ...discardPile],
+          gameOver: true
+        };
+  };
 };
 
 const GameContext = createContext<{
@@ -369,16 +383,8 @@ const GameContext = createContext<{
     target: "player" | "daimon" | "cards",
     animation: AllAnimationTypes,
     milliseconds: number
-  ) => void;
-  dealDamage: (
-    playerHealth?: number,
-    daimonHealth?: number,
-    wager?: number,
-    animatePlayer?: boolean,
-    animateDaimon?: boolean
-  ) => void;
-  drawPlayerCards: (count: number) => void;
-  drawDaimonCards: (count: number) => void;
+  ) => Promise<void>;
+  endRound: () => void;
 } | null>(null);
 
 function GameProvider({ children } : { children: React.ReactNode }) {
@@ -407,131 +413,21 @@ function GameProvider({ children } : { children: React.ReactNode }) {
     });
   };
 
-  async function dealDamage(
-    playerHealthParam?: number,
-    daimonHealthParam?: number,
-    wagerParam?: number,
-    animatePlayer: boolean = true,
-    animateDaimon: boolean = false,
-  ): Promise<boolean> {
-    const prevPlayerHealth = gameState.playerHealth;
-    const prevDaimonHealth = gameState.daimonHealth;
-
-    const newPlayerHealth = playerHealthParam ?? prevPlayerHealth;
-    const newDaimonHealth = daimonHealthParam ?? prevDaimonHealth;
-    const newWager = wagerParam ?? gameState.wager;
+  async function endRound() {
+    gameDispatch({ type: "SET_PHASE", 
+      payload: {
+        phase: "daimon-dead"
+      }
+    });
     
-    if (newDaimonHealth <= 0) return await endRound();
-
-    const playerAnimation = animatePlayer
-    ? (newPlayerHealth < prevPlayerHealth ? "injured" : "healed")
-    : gameState.animations.player;
-
-  const daimonAnimation = animateDaimon
-    ? (newDaimonHealth < prevDaimonHealth ? "injured" : "healed")
-    : gameState.animations.daimon;
-
     gameDispatch({ type: "SET_HEALTHVALUES", 
       payload: {
-        playerHealth: calculateHealth(newPlayerHealth, gameState.playerMaxHealth),
-        daimonHealth: calculateHealth(newDaimonHealth, gameState.daimonMaxHealth),
-        wager: newWager,
-        playerAnimation,
-        daimonAnimation
-      }
-    });
-
-    if (!animatePlayer && !animateDaimon) return false; 
-    
-    await wait(1300);
-
-    animatePlayer && gameDispatch({ type: "SET_ANIMATION", 
-      payload: {
-        target: "player",
-        animation: "idle"
-    }});
-    
-    animateDaimon && gameDispatch({ type: "SET_ANIMATION", 
-      payload: {
-        target: "player",
-        animation: "idle"
-    }});
-
-    return false;
-  };
-
-  async function drawPlayerCards(count: number) {
-    let cardIndex = 0;
-    let cards = gameState.deck.slice(0, count);
-
-    while (cardIndex < count) {
-      gameDispatch({ type: "DRAW_PLAYER_CARD" });
-      await wait(300);
-      
-      if (!cards[cardIndex]) cards.push(gameState.deck.slice(0, count - cardIndex))
-      if (cards[cardIndex].effect !== "Standard") {
-        await handleCardEffects(cards[cardIndex]);
-      }
-      
-      cardIndex++;
-    };
-  };
-
-  async function drawDaimonCards(count: number) {
-    let cardIndex = 0;
-    
-    while (cardIndex < count) {
-      gameDispatch({ type: "DRAW_DAIMON_CARD" });
-      cardIndex++;
-
-      await wait(300);
-    };
-  };
-
-  async function handleCardEffects(card: CardType): Promise<void> {
-    const { playerHealth, daimonHealth, wager } = gameState;
-    
-    await wait(200);
-
-    let newPlayerHealth = playerHealth;
-    let newDaimonHealth = daimonHealth;
-    let animatePlayer = false;
-    let animateDaimon = false;
-
-    switch (card.effect) {
-      case "Charred":
-        newPlayerHealth += card.value;
-        animatePlayer = true;
-        break;
-      case "Bloodstained":
-        newDaimonHealth += card.value;
-        animateDaimon = true;
-        break;
-      case "Standard":
-      default:
-        return;
-    };
-
-    await dealDamage(
-      newPlayerHealth,
-      newDaimonHealth,
-      wager,
-      animatePlayer,
-      animateDaimon
-    )
-  };
-
-  async function endRound() {
-    gameDispatch({ type: "APPLY_EFFECTS", 
-      payload: {
-        gameState: {
-          daimonHealth: 0,
-        }
-      }
-    });
-    await wait(300);
-
-    setAnimation("daimon", "close-eyelid", 2800);
+        daimonHealth: 0,
+        playerHealth: calculateHealth(gameState.playerHealth, gameState.playerMaxHealth, gameState.wager),
+        wager: 0,
+        daimonAnimation: "close-eyelid",
+        playerAnimation: "idle"
+    }})
 
     await wait(2000);
 
@@ -541,24 +437,19 @@ function GameProvider({ children } : { children: React.ReactNode }) {
         table: false,
         healthBars: false,
         dialogueBox: false
-      }
-    });
+    }});
 
     await wait(200);
 
     gameDispatch({ type: "END_ROUND" });
-
-    return true;
   };
 
   return (
-    <GameContext.Provider value={{ 
-      gameState, 
+    <GameContext.Provider value={{
+      gameState,
       gameDispatch,
       setAnimation,
-      dealDamage, 
-      drawPlayerCards,
-      drawDaimonCards
+      endRound
     }}>
       { children }
     </GameContext.Provider>
@@ -567,7 +458,7 @@ function GameProvider({ children } : { children: React.ReactNode }) {
 
 function useGameState() {
   const context = useContext(GameContext);
-  if(!context) {
+  if (!context) {
     throw new Error("useGameState must be used within a GameProvider");
   }
   return context;

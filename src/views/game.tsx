@@ -1,28 +1,29 @@
 import { useGameState } from "../composables/useGameState";
 import MenuScreens from "./menuScreens/menuScreens";
-import "./game.css";
 import TheGambler from "./theGambler";
+import "./game.css";
 
 export default function Game() {
   const { gameState } = useGameState();
   const { started } = gameState;
-  
+
+  console.log(gameState)
+
   return (
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#111"
+        minHeight: "100dvh",
+        minWidth: "100dvw"
       }}
     >
-      {
-        started ? (
-          <TheGambler />
-        ) : (
-          <MenuScreens />
-        )
-      }
+      { started ? (
+        <TheGambler />
+      ) : (
+        <MenuScreens />
+      )}
     </div>
   )
 };
