@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useGameState, type PhaseType } from "../../composables/useGameState";
 import "./daimon.css";
 import { daimons } from "../../daimons";
+import { wait } from "../../utils/utils";
 
 export default function Daimon() {
   const { gameState, gameDispatch, setAnimation } = useGameState();
@@ -19,7 +20,6 @@ export default function Daimon() {
 
   //Transitions into tyches wrath
   useEffect(() => {
-    console
     if (hand !== 6 || gameState.daimonHealth === 0) return;
     
     setAnimation("daimon", "blinking", 1500);
@@ -67,16 +67,34 @@ export default function Daimon() {
         phase: "apply-token-effect"
     }});
 
-    console.log(animations.daimon)
     await setAnimation("daimon", "attacked", 2000);
 
-    newGameState.phase = phase === "apply-daimon-effect" ? 
+    const transitionPhase = phase === "apply-daimon-effect" ? 
       "resolution" : phase;
 
     gameDispatch({ type: "APPLY_EFFECTS", 
       payload: {
         gameState: newGameState
     }});
+
+    await wait(600);
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        target: "daimon",
+        animation: "idle",
+    }});
+
+    await wait(300);
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        target: "player",
+        animation: "idle",
+    }})
+
+    gameDispatch({ type: "SET_PHASE", 
+      payload: {
+        phase: transitionPhase
+    }})
   };
 
   return (

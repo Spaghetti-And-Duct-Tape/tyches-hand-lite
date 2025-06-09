@@ -62,7 +62,11 @@ export const daimons: DaimonType[] = [{
     if (gs.phase === "wager" && gs.hand === 0) {
       return { 
         daimonHealth: gs.daimonHealth * 2,
-        daimonMaxHealth: gs.daimonHealth * 2 
+        daimonMaxHealth: gs.daimonHealth * 2,
+        animations: {
+          ...gs.animations,
+          daimon: "healed"
+        }
       }
     };
   },
@@ -92,7 +96,13 @@ export const daimons: DaimonType[] = [{
   rune: "Θ",
   effect: (gs: GameStateType): Partial<GameStateType> | undefined => {
     if (gs.phase === "apply-daimon-effect") {
-      return { playerHealth: gs.playerHealth - 150 }
+      return { 
+        playerHealth: gs.playerHealth - 150 ,
+        animations: {
+          ...gs.animations,
+          player: "injured"
+        }
+      }
     }
   },
   effectType: "injuring",
@@ -102,10 +112,14 @@ export const daimons: DaimonType[] = [{
   name: "The Choice",
   rune: "δ",
   effect: (gs: GameStateType): Partial<GameStateType> | undefined => {
-    if (gs.phase === "intro-dialogue") {
+    if (gs.phase === "wager" && gs.hand === 0) {
       return { 
         daimonHealth: gs.daimonHealth * 2,
-        daimonMaxHealth: gs.daimonHealth * 2 
+        daimonMaxHealth: gs.daimonHealth * 2,
+        animations: {
+          ...gs.animations,
+          daimon: "healed"
+        }
       }
     };
     if (gs.phase === "apply-daimon-effect") {

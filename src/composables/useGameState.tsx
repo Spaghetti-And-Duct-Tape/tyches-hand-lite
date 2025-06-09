@@ -285,7 +285,7 @@ function gameReducer(
         ...(action.payload.discardPile && { discardPile: action.payload.discardPile }),
         ...(action.payload.deck && { deck: action.payload.deck }),
         hand: playerHand.length === 0 ? hand + 1 : hand,
-        phase: playerTotal?.isBust ? "apply-daimon-effect" : phase,
+        phase: playerTotal?.isBust ? "daimon-turn" : phase,
 
         animations: {
           ...animations,

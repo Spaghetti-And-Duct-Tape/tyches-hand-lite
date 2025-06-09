@@ -46,10 +46,6 @@ export default function TokenIntermission({
         </div>
       </div>
       <div
-        style={{
-          width: "100%",
-          gridColumn: "2 /span 3"
-        }}
         className="token-description intermission-description-container"
       >
         <IntermissionDescription
