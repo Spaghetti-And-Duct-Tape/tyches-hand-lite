@@ -75,8 +75,8 @@ export const daimons: DaimonType[] = [{
   effect: (gs: GameStateType): Partial<GameStateType> | undefined => {
     if (gs.phase === "apply-daimon-effect") {
       return {
-        daimonHealth: gs.daimonHealth + 150,
-        daimonMaxHealth: gs.daimonMaxHealth + 75,
+        daimonHealth: gs.daimonHealth + 250,
+        daimonMaxHealth: gs.daimonMaxHealth + 150,
         animations: {
           ...gs.animations,
           daimon: "healed"
@@ -92,7 +92,7 @@ export const daimons: DaimonType[] = [{
   rune: "Θ",
   effect: (gs: GameStateType): Partial<GameStateType> | undefined => {
     if (gs.phase === "apply-daimon-effect") {
-      return { playerHealth: gs.playerHealth - 100 }
+      return { playerHealth: gs.playerHealth - 150 }
     }
   },
   effectType: "injuring",

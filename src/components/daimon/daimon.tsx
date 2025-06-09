@@ -2,14 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useGameState, type PhaseType } from "../../composables/useGameState";
 import "./daimon.css";
 import { daimons } from "../../daimons";
-import { wait } from "../../utils/utils";
 
 export default function Daimon() {
   const { gameState, gameDispatch, setAnimation } = useGameState();
   const { phase, animations, hand, visibility } = gameState;
   const [isTychesWrath, setIsTychesWrath] = useState<boolean>(false);
   const daimon = daimons[gameState.daimon];
-  const blinkTimer = useRef<number>(0);
   const effectRef = useRef(false);
 
   //Opens eye lid on load
@@ -19,40 +17,19 @@ export default function Daimon() {
     setAnimation("daimon", "open-eyelid", 1500);
   }, [visibility.daimon]);
 
-  //Periodically blinks
-  useEffect(() => {
-    window.clearTimeout(blinkTimer.current);
-    
-    if (!visibility.daimon || animations.daimon === "idle") return;
-    const delay = Math.random() * 5000 + 10000;
-
-    blinkTimer.current = window.setTimeout(() => {
-      setAnimation("daimon", "blinking", 1000);
-    }, delay);
-  }, [animations.daimon]);
-
   //Transitions into tyches wrath
   useEffect(() => {
-    if (hand !== 5 || gameState.daimonHealth === 0) return;
+    console
+    if (hand !== 6 || gameState.daimonHealth === 0) return;
     
-    setAnimation("daimon", "blinking", 1000);
+    setAnimation("daimon", "blinking", 1500);
 
     const timeout = setTimeout(() => {
       setIsTychesWrath(true);
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [visibility.table]);
-
-  useEffect(() => {
-    if (phase !== "apply-daimon-effect") return;
-    if (!daimon.effectType || effectRef.current) {
-      return gameDispatch({ type: "SET_PHASE", 
-        payload: {
-          phase: "resolution"
-      }})
-    }
-  }, [phase]);
+  }, [hand]);
 
   //Resets effects for next hand
   useEffect(() => {
@@ -60,6 +37,19 @@ export default function Daimon() {
   }, [phase]);
 
   useEffect(() => {
+    if (phase !== "apply-daimon-effect") return;
+    const daimonEffect = daimon.effect(gameState);
+
+    if (!daimonEffect || effectRef.current) gameDispatch({
+      type: "SET_PHASE",
+      payload: {
+        phase: "resolution"
+    }}); 
+  }, [phase])
+
+  useEffect(() => {
+    if (effectRef.current) return;
+
     applyDaimonEffects(phase);
   }, [phase]);
 
@@ -72,15 +62,16 @@ export default function Daimon() {
     if (!newGameState) return;
     effectRef.current = true;
 
-    gameDispatch({ type: "SET_ANIMATION", 
+    gameDispatch({ type: "SET_PHASE", 
       payload: {
-        daimon: "attacked"
+        phase: "apply-token-effect"
     }});
+
+    console.log(animations.daimon)
+    await setAnimation("daimon", "attacked", 2000);
 
     newGameState.phase = phase === "apply-daimon-effect" ? 
       "resolution" : phase;
-
-    await setAnimation("daimon", "attacked", 2000);
 
     gameDispatch({ type: "APPLY_EFFECTS", 
       payload: {

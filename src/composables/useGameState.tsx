@@ -404,7 +404,8 @@ function GameProvider({ children } : { children: React.ReactNode }) {
 
     await wait(milliseconds);
 
-    
+    //Cancels resetting animation if already in another animation
+    if (gameState.animations[target] !== animation) return;
     gameDispatch({ type: "SET_ANIMATION", 
       payload: {
         target: target,

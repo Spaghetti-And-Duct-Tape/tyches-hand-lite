@@ -176,11 +176,11 @@
   z-index: 999;
 }
 
-.daimon-attacked, .tyches-wrath {
+.daimon-attacked {
   animation: blink 1s;
 }
 
-.daimon-attacked #eye::before, .tyches-wrath #eye::before {
+.daimon-attacked #eye::before {
   animation: blinkingLid 1s;
 }
 

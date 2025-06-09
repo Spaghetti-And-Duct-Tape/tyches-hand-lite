@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { useGameState } from "../../composables/useGameState"
 import { tokens } from "../../utils/token";
 import Token from "./token";
-import { wait } from "../../utils/utils";
 
 export default function ApplyToken() {
   const { gameState, gameDispatch, setAnimation, endRound } = useGameState();
@@ -12,16 +11,6 @@ export default function ApplyToken() {
 
   useEffect(() => {
     if (phase === "resolution") effectRef.current = false;
-  }, [phase]);
-
-  useEffect(() => {
-    if (phase !== "apply-token-effect") return;
-    if (!playerEffect || effectRef.current) {
-      return gameDispatch({ type: "SET_PHASE", 
-        payload: {
-          phase: "apply-daimon-effect"
-      }})
-    };
   }, [phase]);
 
   useEffect(() => {
@@ -37,9 +26,16 @@ export default function ApplyToken() {
     if (!newGameState) return;
     effectRef.current = true;
 
+    gameDispatch({ type: "SET_PHASE", 
+      payload: {
+        phase: "apply-token-effect"
+    }});
+
     await setAnimation("player", "attacked", 1000);
 
     if (newGameState.daimonHealth !== undefined && newGameState?.daimonHealth <= 0) return endRound();
+
+    newGameState.phase = phase;
 
     gameDispatch({ type: "APPLY_EFFECTS",
       payload: {

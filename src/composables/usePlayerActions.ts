@@ -140,9 +140,6 @@ export default function usePlayerActions() {
     }});
     
     await wait(500);
-
-    //await drawPlayerCard();
-
     
     gameDispatch({ type: "SET_PHASE",
       payload: {

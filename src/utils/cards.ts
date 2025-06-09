@@ -61,7 +61,7 @@ function buildCardInventory(): CardType[] {
   for (const effect of effects) {
     for (const suit of suits) {
       for (const rank of ranks) {
-        const effectValue = Math.round((250 * convertRank(rank)) / 15);
+        const effectValue = Math.round((500 * convertRank(rank)) / 15);
         cardArray.push({
           id: cardIndex++,
           name: `A ${ effect } ${ rank } of ${suit}`,
@@ -129,7 +129,7 @@ export function shuffleCards(
 ): CardType[] {
   if (round === 0) return tutorialDeck;
 
-  const biasBoost = (4 / round);
+  const biasBoost = round < 4 ? (6 / round) : 1;
   const rankWeights = (rank: number) => rank >= 10 ? biasBoost : 1;
 
   const weights = calculateCardWeights(cards, {
