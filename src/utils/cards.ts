@@ -61,7 +61,7 @@ function buildCardInventory(): CardType[] {
   for (const effect of effects) {
     for (const suit of suits) {
       for (const rank of ranks) {
-        const effectValue = Math.round((300 * convertRank(rank)) / 15);
+        const effectValue = Math.round((200 * convertRank(rank)) / 15);
         cardArray.push({
           id: cardIndex++,
           name: `A ${ effect } ${ rank } of ${suit}`,
