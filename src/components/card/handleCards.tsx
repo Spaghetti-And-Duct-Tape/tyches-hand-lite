@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useGameState } from "../../composables/useGameState"
 import { cardTotal, emptyCard } from "../../utils/cards";
 import { effectCardDelay, standardCardDelay, wait } from "../../utils/utils";
@@ -11,7 +11,6 @@ export default function HandleCards() {
   const { phase, playerHand, daimonHand } = gameState;
   const { drawPlayerCard, drawDaimonCard } = usePlayerActions();
   const handleDaimonHand = daimonHand.length === 1 ? [...daimonHand, emptyCard] : daimonHand;
-
   useEffect(() => {
     if (phase !== "draw") return;
     handleDrawPhase();
@@ -27,6 +26,10 @@ export default function HandleCards() {
     if (phase !== "daimon-turn") return;
     handleDaimonPhase();
   }, [phase, daimonHand]);
+
+  useEffect(() => {
+    if (phase !== "player-turn") return;
+  }, [phase]);
 
   async function handleDrawPhase() {
     const isFirstCard = playerHand.length === 0;
@@ -59,24 +62,25 @@ export default function HandleCards() {
     const delay = isSecondCard ? 0 : 300;
     const daimonTotal = cardTotal(daimonHand).sum
 
-    if (daimonTotal < 17) {
+    if (daimonTotal < 17 && !cardTotal(playerHand).isBust) {
       await wait(delay);
       return drawDaimonCard();
     };
 
     gameDispatch({ type: "SET_PHASE",
       payload: {
-        phase: "apply-daimon-effect"
+        phase: "apply-token-effect"
     }});
   };
 
   async function player2xCard() {
     await drawPlayerCard();
+    await wait(300);
 
     gameDispatch({ type: "SET_PHASE", 
       payload: {
         phase: "daimon-turn"
-    }})
+    }});
   };
 
   return (

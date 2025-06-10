@@ -12,6 +12,7 @@ export type PhaseType =
   | "daimon-turn"
   | "apply-token-effect"
   | "apply-daimon-effect"
+  | "apply-effect"
   | "resolution"
   | "daimon-dead"
   | "end-dialogue"
@@ -285,7 +286,7 @@ function gameReducer(
         ...(action.payload.discardPile && { discardPile: action.payload.discardPile }),
         ...(action.payload.deck && { deck: action.payload.deck }),
         hand: playerHand.length === 0 ? hand + 1 : hand,
-        phase: playerTotal?.isBust ? "apply-daimon-effect" : phase,
+        phase: playerTotal?.isBust ? "daimon-turn" : phase,
 
         animations: {
           ...animations,
@@ -404,7 +405,8 @@ function GameProvider({ children } : { children: React.ReactNode }) {
 
     await wait(milliseconds);
 
-    
+    //Cancels resetting animation if already in another animation
+    if (gameState.animations[target] !== animation) return;
     gameDispatch({ type: "SET_ANIMATION", 
       payload: {
         target: target,

@@ -35,6 +35,10 @@
   background-color: #1B3A4B;
 } 
 
+.token.heal .colored-layer {
+  background-color: #1B4B3A;
+}
+
 .token .text-ring {
   position: absolute;
   width: 150%;
@@ -54,8 +58,9 @@
   height: 50%;
   border-radius: 50%;
   border: 3px solid #d4a017;
-  top: 23%;
-  left: 23%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   }
 
 .token .inner-core{
@@ -63,8 +68,9 @@
   width: 20%;
   height: 20%;
   border-radius: 50%;
-  top: 40%;
-  left: 40%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,10 +86,14 @@
     0 0 30px rgba(255, 255, 255, 0.5),
     0 0 40px rgba(255, 255, 255, 0.3);
     
-  animation: pulse-glow 10s infinite;
+  animation: pulse-glow 5s infinite;
+}
+
+.token-container .hover-box {
+  top: -150%;
 }
 
 @keyframes flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

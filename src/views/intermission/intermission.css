@@ -25,3 +25,15 @@
 .token-description.intermission-description-container .wooden-panel-container .intermission-description {
   max-height: 100%;
 }
+
+.damage-color {
+  color: #be2c2c;
+}
+
+.utility-color {
+  color: #438db5;
+}
+
+.heal-color {
+  color: #3fa984;
+}

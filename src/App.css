@@ -2,13 +2,12 @@ html, body, #root {
   margin: 0;
   padding: 0;
   display: flex;
-  min-height: 100%;
-  min-width: 100%;
+  min-height: 100vh;
+  min-width: 100vw;
   align-items: center;
   justify-content: center;
   color: #A88E72;
   background-color: #111;
-  overflow: hidden;
 }
 
 .transition-opacity {

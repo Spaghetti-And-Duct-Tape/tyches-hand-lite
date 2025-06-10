@@ -7,6 +7,11 @@ export const daimonDialogue5: daimonDialogueType = {
     "The hollowness that surounds you ...",
     "No need to struggle - embrace the abyss."
   ],
+  "hand-dialogue": {
+    6: [
+      "There is no end to these depths."
+    ]
+  },
   "end-dialogue" :[
     "Your step is uncertain - your path is aimless.",
     'The lie you told yourself "one more chance" now rings hollow.',

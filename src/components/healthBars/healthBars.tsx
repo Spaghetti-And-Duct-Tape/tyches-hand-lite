@@ -32,7 +32,7 @@ export default function HealthBars() {
             name={ daimons[daimon].name }
             health={ daimonHealth }
             maxHealth={ daimonMaxHealth }
-            isPlayer={ true }
+            isPlayer={ false }
           />
         </div>
         <div

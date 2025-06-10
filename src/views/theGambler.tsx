@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useGameState } from "../composables/useGameState"
-import Landscape from "./landScape";
+import Landscape from "./landscape";
 
 export default function TheGambler() {
   const { gameState, gameDispatch } = useGameState();
@@ -14,8 +14,8 @@ export default function TheGambler() {
     <div
       style={{
         position: "relative",
-        height: "100dvh",
-        width: "100dvw",
+        height: "100vh",
+        width: "100vw",
         zIndex: "1",
         display: "flex",
         justifyContent: "center",
