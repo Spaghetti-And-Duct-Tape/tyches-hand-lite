@@ -6,9 +6,6 @@ import "./game.css";
 export default function Game() {
   const { gameState } = useGameState();
   const { started } = gameState;
-
-  console.log(gameState.playerHand)
-  console.log(gameState.deck)
   
   return (
     <div

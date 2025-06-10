@@ -137,7 +137,7 @@ export const tokens: TokenType[] = [{
   name: "Nadir's Blessing",
   rune: "η",
   description: "A hand reaches to those who are humble and lowly helping them rise to their truest potential.",
-  effectDescription: "See more LOW cards at the top of the deck. If last LOW card causes a bust it is returned to the deck.",
+  effectDescription: "See more LOW cards at the top of the deck. If last card has a LOW rank and causes a bust, it is returned to the deck.",
   gameState: (gs: GameStateType) => {
     if (gs.phase === "intro-dialogue") {
       const rankWeights = (rank: number) => {
