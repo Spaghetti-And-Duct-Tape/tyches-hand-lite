@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { useGameState } from "../../composables/useGameState"
 import { tokens } from "../../utils/token";
 import Token from "./token";
-import { wait } from "../../utils/utils";
 import HoverBox from "../hoverBox/hoverBox";
 
 export default function ApplyToken() {
@@ -13,6 +12,17 @@ export default function ApplyToken() {
 
   useEffect(() => {
     if (phase === "resolution") effectRef.current = false;
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "apply-token-effect") return;
+    const tokenEffect = playerEffect?.gameState(gameState);
+
+    if (!tokenEffect || effectRef.current) gameDispatch({
+      type: "SET_PHASE",
+      payload: {
+        phase: "apply-daimon-effect"
+    }});
   }, [phase]);
 
   useEffect(() => {
@@ -30,7 +40,7 @@ export default function ApplyToken() {
 
     gameDispatch({ type: "SET_PHASE", 
       payload: {
-        phase: "apply-token-effect"
+        phase: "apply-effect"
     }});
 
     await setAnimation("player", "attacked", 1300);
@@ -53,7 +63,7 @@ export default function ApplyToken() {
     >
       <HoverBox
         name={ tokens[token].name }
-        description={ tokens[token].description }
+        description={ tokens[token].effectDescription }
       >
         <Token
           token={ tokens[token] }

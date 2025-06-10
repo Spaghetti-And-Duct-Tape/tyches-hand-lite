@@ -69,7 +69,7 @@ export default function HandleCards() {
 
     gameDispatch({ type: "SET_PHASE",
       payload: {
-        phase: "apply-daimon-effect"
+        phase: "apply-token-effect"
     }});
   };
 
