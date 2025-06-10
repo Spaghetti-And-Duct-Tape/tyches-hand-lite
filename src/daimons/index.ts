@@ -75,7 +75,7 @@ export const daimons: DaimonType[] = [{
 }, {
   id: 3,
   name: "The Resolve",
-  rune: "Ψ",
+  rune: "ζ",
   effect: (gs: GameStateType): Partial<GameStateType> | undefined => {
     if (gs.phase === "apply-daimon-effect") {
       return {

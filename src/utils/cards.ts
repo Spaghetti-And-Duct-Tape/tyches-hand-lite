@@ -188,6 +188,7 @@ function weightedRandomIndex(weights: number[]): number {
   return weights.length - 1;
 };
 
+//Charred cards
 /*export const tutorialDeck = [
   cardInventory[0], cardInventory[1], cardInventory[2], cardInventory[3],
   cardInventory[4], cardInventory[5], cardInventory[6], cardInventory[7],
@@ -204,23 +205,8 @@ function weightedRandomIndex(weights: number[]): number {
   cardInventory[48], cardInventory[49], cardInventory[50], cardInventory[51],
 ];*/
 
+//Bloodstained cards
 /*export const tutorialDeck: CardType[] = [
-  cardInventory[123], cardInventory[121], cardInventory[125], cardInventory[152], 
-  cardInventory[124], cardInventory[142], cardInventory[135], cardInventory[122], 
-  cardInventory[134], cardInventory[127], cardInventory[143], cardInventory[140],
-  cardInventory[105], cardInventory[104], cardInventory[106], cardInventory[107], 
-  cardInventory[108], cardInventory[109], cardInventory[111], cardInventory[112], 
-  cardInventory[113], cardInventory[114], cardInventory[115], cardInventory[116], 
-  cardInventory[119], cardInventory[120], cardInventory[130], cardInventory[131], 
-  cardInventory[132], cardInventory[133], cardInventory[137], cardInventory[144], 
-  cardInventory[145], cardInventory[146], cardInventory[147], cardInventory[148], 
-  cardInventory[150], cardInventory[151], cardInventory[153], cardInventory[154], 
-  cardInventory[155], cardInventory[110], cardInventory[139], cardInventory[138],
-  cardInventory[129], cardInventory[149], cardInventory[117], cardInventory[128], 
-  cardInventory[141], cardInventory[118], cardInventory[126], cardInventory[136], 
-];*/
-
-export const tutorialDeck: CardType[] = [
   cardInventory[52], cardInventory[53], cardInventory[54], cardInventory[55],
   cardInventory[56], cardInventory[57], cardInventory[58], cardInventory[59],
   cardInventory[60], cardInventory[61], cardInventory[62], cardInventory[63],
@@ -234,4 +220,20 @@ export const tutorialDeck: CardType[] = [
   cardInventory[92], cardInventory[93], cardInventory[94], cardInventory[95],
   cardInventory[96], cardInventory[97], cardInventory[98], cardInventory[99],
   cardInventory[100], cardInventory[101], cardInventory[102], cardInventory[103],
+];*/
+
+export const tutorialDeck: CardType[] = [
+  cardInventory[123], cardInventory[121], cardInventory[125], cardInventory[152], 
+  cardInventory[124], cardInventory[142], cardInventory[135], cardInventory[122], 
+  cardInventory[134], cardInventory[127], cardInventory[143], cardInventory[140],
+  cardInventory[105], cardInventory[104], cardInventory[106], cardInventory[107], 
+  cardInventory[108], cardInventory[109], cardInventory[111], cardInventory[112], 
+  cardInventory[113], cardInventory[114], cardInventory[115], cardInventory[116], 
+  cardInventory[119], cardInventory[120], cardInventory[130], cardInventory[131], 
+  cardInventory[132], cardInventory[133], cardInventory[137], cardInventory[144], 
+  cardInventory[145], cardInventory[146], cardInventory[147], cardInventory[148], 
+  cardInventory[150], cardInventory[151], cardInventory[153], cardInventory[154], 
+  cardInventory[155], cardInventory[110], cardInventory[139], cardInventory[138],
+  cardInventory[129], cardInventory[149], cardInventory[117], cardInventory[128], 
+  cardInventory[141], cardInventory[118], cardInventory[126], cardInventory[136], 
 ];

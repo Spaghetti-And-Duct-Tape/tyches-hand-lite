@@ -94,11 +94,13 @@ function CurrentToken({ currentToken } : { currentToken?: TokenType }) {
           <p
             style={{ 
               margin: "0",
+              color: "#F2A900"
             }}
           >
             Current Blessing:
           </p> 
           <p
+            className={ `${ currentToken.effect }-color` }
             style={{ 
               margin: "0",
             }}

@@ -40,7 +40,7 @@ export default function usePlayerActions() {
         daimonAnimation: "injured"
     }});
 
-    await wait(500);
+    await wait(1000);
     gameDispatch({ type: "SET_ANIMATION", 
       payload: {
         target: "daimon",
@@ -48,7 +48,7 @@ export default function usePlayerActions() {
       }
     });
 
-    await wait(400);
+    await wait(300);
     gameDispatch({ type: "SET_ANIMATION", 
       payload: {
         target: "player",
@@ -56,7 +56,7 @@ export default function usePlayerActions() {
       }
     });
 
-    await wait(500);
+    await wait(200);
     
 
     gameDispatch({ type: "SET_PHASE",
@@ -139,8 +139,20 @@ export default function usePlayerActions() {
         daimonAnimation: "injured"
     }});
     
-    await wait(500);
-    
+    await wait(1000);
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        taget: "daimon",
+        animation: "idle",
+    }});
+
+    await wait(300);
+    gameDispatch({ type: "SET_ANIMATION", 
+      payload: {
+        taget: "player",
+        animation: "idle",
+    }});
+
     gameDispatch({ type: "SET_PHASE",
       payload: {
         phase: "player-doubles"

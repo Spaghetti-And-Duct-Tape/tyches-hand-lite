@@ -11,8 +11,6 @@ export default function HandleCards() {
   const { phase, playerHand, daimonHand } = gameState;
   const { drawPlayerCard, drawDaimonCard } = usePlayerActions();
   const handleDaimonHand = daimonHand.length === 1 ? [...daimonHand, emptyCard] : daimonHand;
-  const doubleDrawRef = useRef(false);
-
   useEffect(() => {
     if (phase !== "draw") return;
     handleDrawPhase();
@@ -21,7 +19,6 @@ export default function HandleCards() {
   
   useEffect(() => {
     if (phase !== "player-doubles") return;
-    if (doubleDrawRef.current) return;
     player2xCard()
   }, [phase])
 
@@ -31,8 +28,7 @@ export default function HandleCards() {
   }, [phase, daimonHand]);
 
   useEffect(() => {
-    if (phase !== "resolution") return;
-    doubleDrawRef.current = false;
+    if (phase !== "player-turn") return;
   }, [phase]);
 
   async function handleDrawPhase() {
@@ -78,13 +74,13 @@ export default function HandleCards() {
   };
 
   async function player2xCard() {
-    doubleDrawRef.current = true;
     await drawPlayerCard();
+    await wait(300);
 
     gameDispatch({ type: "SET_PHASE", 
       payload: {
         phase: "daimon-turn"
-    }})
+    }});
   };
 
   return (

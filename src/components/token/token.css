@@ -35,6 +35,10 @@
   background-color: #1B3A4B;
 } 
 
+.token.heal .colored-layer {
+  background-color: #1B4B3A;
+}
+
 .token .text-ring {
   position: absolute;
   width: 150%;
@@ -85,7 +89,11 @@
   animation: pulse-glow 5s infinite;
 }
 
+.token-container .hover-box {
+  top: -150%;
+}
+
 @keyframes flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

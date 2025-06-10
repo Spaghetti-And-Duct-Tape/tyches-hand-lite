@@ -1,6 +1,6 @@
 import type { GameStateType } from "../composables/useGameState";
-import { calculateCardWeights, cardTotal, randomCardPicker } from "./cards";
-import { calculateHealth, calculateWager } from "./utils";
+import { calculateCardWeights, randomCardPicker } from "./cards";
+import { calculateHealth } from "./utils";
 
 export interface TokenType {
   id: number;
@@ -27,7 +27,7 @@ export const tokens: TokenType[] = [{
     }};
     if (gs.phase === "player-turn") {
       return {
-        daimonHealth: gs.daimonHealth - 0.4 * (gs.daimonMaxHealth -gs.daimonHealth),
+        daimonHealth: gs.daimonHealth - 0.45 * (gs.daimonMaxHealth -gs.daimonHealth),
         animations: {
           ...gs.animations,
           daimon: "injured"
@@ -41,19 +41,10 @@ export const tokens: TokenType[] = [{
   name: "Gemini's Blessing",
   rune: "Π",
   description: "The light of the twin stars eluminate a new path. A blessing for those with a stubborn heart.",
-  effectDescription: "Doubling down is permitted in any scenario and refunds blood pool.",
+  effectDescription: "Grants the freedom to double-down in all situations.",
   gameState: (gs: GameStateType) => {
     if (gs.phase === "player-turn") {
-      if (gs.playerHand.length > 2) return {
-        playerActions: [] 
-      }
-    };
-
-    if (gs.phase === "player-doubles") {
-      const qrtWager = Math.floor(gs.wager / 4)
-      return {
-        playerHealth: calculateHealth(gs.playerHealth, gs.playerMaxHealth, qrtWager)
-      }
+      if (gs.playerHand.length > 2) return { playerActions: [] }
     }
   },
   effect: "utility" 
@@ -62,7 +53,7 @@ export const tokens: TokenType[] = [{
   name: "Bloodletter's Blessing",
   rune: "β",
   description: "To accept this blessing is to admit your desperatation - as the sins of the past seem to bubble to the top.",
-  effectDescription: "See more BLOODSTAINED cards at the top of the deck. Bloodstained effect is doubled.",
+  effectDescription: "See more BLOODSTAINED cards at the top of the deck.",
   gameState: (gs: GameStateType) => {
     if (gs.phase === "intro-dialogue") {
       const effectWeights = (effect: string) => effect === "Bloodstained" ? 6 : 1; 
@@ -72,19 +63,7 @@ export const tokens: TokenType[] = [{
 
       const deck = randomCardPicker(gs.deck, weights, 52)
       return { deck: deck }
-    };
-
-    if (gs.phase === "daimon-turn") {
-      const totalBloodstainedDamage = gs.playerHand
-        .filter(card => card.effect === "Bloodstained")
-        .reduce((sum, card) => {
-          return sum + card.value
-        }, 0);
-
-      return {
-        daimonHealth: calculateHealth(gs.daimonHealth, gs.daimonMaxHealth, totalBloodstainedDamage)
-      };
-    };
+    }
   },
   effect: "utility" 
 }, {
@@ -92,7 +71,7 @@ export const tokens: TokenType[] = [{
   name: "Arsenist's Blessing",
   rune: "Φ",
   description: "A blessing for those that recognize, sometimes for the new to grow the old must burn.",
-  effectDescription: "See more CHARRED cards at the top of the deck. Charred effect is doubled",
+  effectDescription: "See more CHARRED cards at the top of the deck.",
   gameState: (gs: GameStateType) => {
     if (gs.phase === "intro-dialogue") {
       const effectWeights = (effect: string) => effect === "Charred" ? 6 : 1; 
@@ -103,19 +82,7 @@ export const tokens: TokenType[] = [{
       const deck = randomCardPicker(gs.deck, weights, 52)
      
       return { deck: deck }
-    };
-
-    if (gs.phase === "daimon-turn") {
-      const totalCharredHealed = gs.playerHand
-        .filter(card => card.effect === "Charred")
-        .reduce((sum, card) => {
-          return sum + card.value
-        }, 0);
-
-      return {
-        playerHealth: calculateHealth(gs.playerHealth, gs.playerMaxHealth, totalCharredHealed)
-      };
-    };
+    }
   },
   effect: "utility" 
 }, {
@@ -127,18 +94,18 @@ export const tokens: TokenType[] = [{
   gameState: (gs: GameStateType) => {
     if (gs.phase === "player-turn") {
       return {
-        playerHealth: gs.playerHealth + 100,
-        playerMaxHealth: gs.playerMaxHealth + 250
+        playerHealth: gs.playerHealth + 250,
+        playerMaxHealth: gs.playerMaxHealth + 150
       }
     }
   },
-  effect: "damage" 
+  effect: "heal" 
 }, {
   id: 5,
   name: "Nadir's Blessing",
   rune: "η",
   description: "A hand reaches to those who are humble and lowly helping them rise to their truest potential.",
-  effectDescription: "See more LOW cards at the top of the deck, if a low card leads to a bust it is returned to the deck.",
+  effectDescription: "See more LOW cards at the top of the deck.",
   gameState: (gs: GameStateType) => {
     if (gs.phase === "intro-dialogue") {
       const rankWeights = (rank: number) => {
@@ -151,20 +118,6 @@ export const tokens: TokenType[] = [{
       const deck = randomCardPicker(gs.deck, weights, 52)
       
       return { deck: deck }
-    };
-
-    if (gs.phase === "daimon-turn") {
-      console.log('here')
-      const playerBust = cardTotal(gs.playerHand).isBust;
-      if (playerBust) {
-        const lastCard = gs.playerHand[gs.playerHand.length - 1];
-        if (typeof lastCard.rank === "number" && lastCard.rank <= 7) {
-          return {
-            playerHand: gs.playerHand.slice(0, -1),
-            deck: [lastCard, ...gs.deck]
-          }
-        }
-      }
     }
   },
   effect: "utility" 
@@ -173,7 +126,7 @@ export const tokens: TokenType[] = [{
   name: "Zenith's Blessing",
   rune: "Z",
   description: "Tyche calls from the highest summit, offering her blessing to those that dare reach higher.",
-  effectDescription: "See more HIGH cards at the top of the deck. Blackjacks trippler the pot.",
+  effectDescription: "See more HIGH cards at the top of the deck.",
   gameState: (gs: GameStateType) => {
     if (gs.phase === "intro-dialogue") {
       const rankWeights = (rank: number) => {
@@ -186,18 +139,6 @@ export const tokens: TokenType[] = [{
       const deck = randomCardPicker(gs.deck, weights, 52)
     
       return { deck: deck }
-    };
-
-    if (gs.phase === "daimon-turn") {
-      console.log('here')
-      const blackjack = cardTotal(gs.playerHand).isBlackjack;
-
-      console.log(blackjack)
-      if (blackjack) {
-        return {
-          wager: gs.wager * 3
-        }
-      } 
     }
   },
   effect: "utility" 

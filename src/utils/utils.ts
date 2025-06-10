@@ -1,6 +1,6 @@
 import { cardTotal, type CardType } from "./cards";
 
-export const effectCardDelay = 1000;
+export const effectCardDelay = 1500;
 export const standardCardDelay = 300;
 
 export function wait(ms: number) {

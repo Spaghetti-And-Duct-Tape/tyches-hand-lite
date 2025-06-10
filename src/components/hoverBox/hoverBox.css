@@ -1,0 +1,41 @@
+.hover-container {
+  &:hover{
+    .hover-box {
+      display: block;
+    }
+  }
+}
+
+.hover-box {
+  top: 0%;
+  left: 100%;
+  width: 11.25rem;
+  color: #FFF;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: none;
+  pointer-events: none;
+  z-index: 1000;
+  transition: display 0.3s ease, transform 0.3s ease;
+  
+  .hover-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 5px;
+  }
+
+  .include-bottom-border {
+    border-bottom: 2px solid #FFF;
+  }
+
+  .hover-description {
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.hide-hover-box {
+  opacity: 0 !important;
+}

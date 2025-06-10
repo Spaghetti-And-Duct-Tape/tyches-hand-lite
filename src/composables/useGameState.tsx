@@ -12,6 +12,7 @@ export type PhaseType =
   | "daimon-turn"
   | "apply-token-effect"
   | "apply-daimon-effect"
+  | "apply-effect"
   | "resolution"
   | "daimon-dead"
   | "end-dialogue"
@@ -85,7 +86,7 @@ const initialGameState: GameStateType = {phase: "intro-dialogue",
   daimonHand: [],
   deck: tutorialDeck,
   discardPile: [],
-  token: null,
+  token: 4,
   visibility: {
     daimon: false,
     table: false,

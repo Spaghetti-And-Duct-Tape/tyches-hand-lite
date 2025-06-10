@@ -1,5 +1,6 @@
 import { useGameState } from "../../composables/useGameState";
 import type { CardType } from "../../utils/cards";
+import HoverBox from "../hoverBox/hoverBox";
 import Card from "./card";
 
 export default function PerspectiveCards({
@@ -33,10 +34,16 @@ export default function PerspectiveCards({
             <div
               className="perspective-card"
             >
-              <Card
-                card={ card }
+              <HoverBox
+                name={ card.name }
+                description={ card.effectDescription }
                 isFlipped={ card.flipped }
-              />
+              >
+                <Card
+                  card={ card }
+                  isFlipped={ card.flipped }
+                />
+            </HoverBox>
             </div>
           </div>
         ))

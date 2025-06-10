@@ -60,7 +60,7 @@ export default function CardIntermission({
       >
         <p>
           { toggleCards 
-            ? "Three cards lie before you, tap to add them to your deck."
+            ? "Five cards lie before you, tap to add them to your deck."
             : "Tyche demands balance. Choose " + cardsToAdd.length + " cards to remove."
           }
         </p>
