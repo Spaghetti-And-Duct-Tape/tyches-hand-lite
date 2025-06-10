@@ -27,7 +27,7 @@ export const tokens: TokenType[] = [{
     }};
     if (gs.phase === "player-turn") {
       return {
-        daimonHealth: gs.daimonHealth - 0.45 * (gs.daimonMaxHealth -gs.daimonHealth),
+        daimonHealth: gs.daimonHealth - 0.4 * (gs.daimonMaxHealth -gs.daimonHealth),
         animations: {
           ...gs.animations,
           daimon: "injured"
@@ -126,8 +126,8 @@ export const tokens: TokenType[] = [{
   gameState: (gs: GameStateType) => {
     if (gs.phase === "player-turn") {
       return {
-        playerHealth: gs.playerHealth + 250,
-        playerMaxHealth: gs.playerMaxHealth + 150
+        playerHealth: gs.playerHealth + 150,
+        playerMaxHealth: gs.playerMaxHealth + 100
       }
     };
   },
@@ -170,7 +170,7 @@ export const tokens: TokenType[] = [{
   name: "Zenith's Blessing",
   rune: "Z",
   description: "Tyche calls from the highest summit, offering her blessing to those that dare reach higher.",
-  effectDescription: "See more HIGH cards at the top of the deck and Blackjacks tripple the wager.",
+  effectDescription: "See more HIGH cards at the top of the deck and Blackjacks increase the wager.",
   gameState: (gs: GameStateType) => {
     if (gs.phase === "intro-dialogue") {
       const rankWeights = (rank: number) => {
@@ -189,7 +189,7 @@ export const tokens: TokenType[] = [{
       const isBlackjack = cardTotal(gs.playerHand).isBlackjack;
       
       if (isBlackjack) return {
-        wager: gs.wager * 3
+        wager: Math.floor(gs.wager * 1.5)
       };
     };
   },
