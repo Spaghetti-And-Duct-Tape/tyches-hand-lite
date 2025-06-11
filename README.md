@@ -1,12 +1,9 @@
 # Tyche's Hand
 
 
-![Screenshot of the intro dialogue for "The Draw" saying, "Ah... you're finally awake."](/src/assets/tyches_hand_awake.png)  
+!["Screenshot of the intro dialogue for "The Draw" saying "Ah... you're finally awake.""](/src/assets/tyches_hand_awake.png)  
 
-Screenshot of the intro dialogue for "The Draw" saying,  
-"Ah... you're finally awake."
-
-## Play the Game  
+##### Play the Game  
 [https://tyches-hand.netlify.app/](https://tyches-hand.netlify.app/)
 
 You awaken in the hollowed-out corpse of an abandoned casino.
