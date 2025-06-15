@@ -11,8 +11,8 @@ export default function GameOverScreen() {
 
   function selectGameEnding() {
     const counts = [
-      deck.filter(card => card.effect === "Bloodstained").length,
       deck.filter(card => card.effect === "Charred").length,
+      deck.filter(card => card.effect === "Bloodstained").length,
       deck.filter(card => card.effect === "Standard").length
     ];
     

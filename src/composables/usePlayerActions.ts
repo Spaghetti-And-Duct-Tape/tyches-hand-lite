@@ -1,4 +1,4 @@
-import { shuffleCards, type CardType } from "../utils/cards";
+import { cardTotal, shuffleCards, type CardType } from "../utils/cards";
 import { calculateHealth, calculateWager, effectCardDelay, handWinner, standardCardDelay, wait } from "../utils/utils";
 import { useGameState, type GameStateType, type PlayerActionsType } from "./useGameState";
 
@@ -56,9 +56,7 @@ export default function usePlayerActions() {
       }
     });
 
-    await wait(200);
-    
-
+    await wait(500);
     gameDispatch({ type: "SET_PHASE",
       payload: {
         phase: "draw"
@@ -206,6 +204,18 @@ export default function usePlayerActions() {
         animation: "idle"
       }
     });
+
+    if (cardTotal([...playerHand, drawnCard]).isBust) {
+      gameDispatch({ type: "SET_PHASE", 
+        payload: {
+          phase: "daimon-turn"
+        }
+      })
+    };
+    
+    await wait(postEffectDelay);
+    
+   
   };
 
   async function resolveHand() {

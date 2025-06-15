@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { useGameState } from "../../composables/useGameState"
 import { tokens } from "../../utils/token";
 import Token from "./token";
-import HoverBox from "../hoverBox/hoverBox";
 
 export default function ApplyToken() {
   const { gameState, gameDispatch, setAnimation, endRound } = useGameState();
@@ -43,7 +42,7 @@ export default function ApplyToken() {
         phase: "apply-effect"
     }});
 
-    await setAnimation("player", "attacked", 1300);
+    await setAnimation("player", "attacked", 2500);
 
     if (newGameState.daimonHealth !== undefined && newGameState?.daimonHealth <= 0) return endRound();
 
@@ -58,17 +57,20 @@ export default function ApplyToken() {
   if (token === null) return;
   
   return (
-    <div 
-      className={ `${ animations.player === "attacked" ? "player-attacked" : "" } token-container` }
-    >
-      <HoverBox
-        name={ tokens[token].name }
-        description={ tokens[token].effectDescription }
-      >
-        <Token
-          token={ tokens[token] }
-        />
-      </HoverBox>
-    </div>
+    <>
+      { animations.player &&
+        <div 
+          className="player-effect"
+          style={{
+            position: "absolute",
+            fontSize: "50px"
+          }}
+        >
+          <Token
+            token={ tokens[token] }
+          />
+        </div>
+      }
+    </>
   )
 };

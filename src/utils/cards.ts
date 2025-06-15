@@ -27,11 +27,11 @@ const effects: EffectType[] = ["Charred", "Bloodstained", "Standard"];
 const effectDescription = {
   "Charred": {
     story: "The embers on these cards still cauterize wounds.",
-    effect: "The gambler's blood pool is slightly replenished at the end of the hand."
+    effect: "The gambler's blood pool is slightly replenished."
   },
   "Bloodstained": {
     story: "The cards are matted together, filling the room with a foul odor.",
-    effect: "The house's blood pool is slightly decreased at the end of the hand."
+    effect: "The house's blood pool is slightly decreased."
   },
   "Standard": {
     story: "A plain set of cards.",

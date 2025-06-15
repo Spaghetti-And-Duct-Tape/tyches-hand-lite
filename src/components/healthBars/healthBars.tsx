@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import { useGameState } from "../../composables/useGameState";
 import { daimons } from "../../daimons";
-import ApplyToken from "../token/applyToken";
-import HealthStatus from "./healthBar";
+import { tokens } from "../../utils/token";
+import HoverBox from "../hoverBox/hoverBox";
+import Token from "../token/token";
+import HealthBar from "./healthBar";
 import WagerBottle from "./wagerBottle";
 
 export default function HealthBars() {
@@ -10,11 +13,21 @@ export default function HealthBars() {
     playerHealth, 
     playerMaxHealth,
     daimon,
-    round,
+    token,
     daimonHealth, 
     daimonMaxHealth,
     visibility,
   } = gameState;
+  const [prevDaimonHealth, setPrevDaimonHealth] = useState(daimonHealth);
+  const daimonHealthChange = daimonHealth - prevDaimonHealth;
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPrevDaimonHealth(daimonHealth);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [daimonHealth])
 
   return (
     <>
@@ -22,43 +35,89 @@ export default function HealthBars() {
           className="healthbar-content transition-opacity"
           style={{
             position: "absolute",
-            top: "5%",
-            right: "2%",
+            bottom: "5%",
+            left: "50%",
             zIndex: "5",
+            transform: "translateX(-50%)",
             opacity: visibility.healthBars ? "1" : "0"
           }}
         >
-          <HealthStatus
-            name={ daimons[daimon].name }
-            health={ daimonHealth }
-            maxHealth={ daimonMaxHealth }
-            isPlayer={ false }
-          />
+          <div
+            style={{
+              width: "50dvw"
+            }} 
+            className="health-status-container"
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "end"
+              }}
+            >
+              <h2
+                className="boss-name"
+                style={{
+                  margin: "0"
+                }}
+              >
+                { daimons[daimon].name }
+              </h2>
+              { daimonHealthChange !== 0 &&
+                <p
+                  className={ `transition-opacity daimon-damage ${ daimonHealthChange > 0 ? "" : "negative-color" }` }
+                  style={{
+                    margin: "0",
+                    opacity: daimonHealthChange === 0 ? "0" : "1",
+                    maxHeight: "fit-content"
+                  }}
+                >
+                  { daimonHealthChange }
+                </p>
+              }
+            </div>
+            <HealthBar
+              health={ daimonHealth }
+              maxHealth={ daimonMaxHealth }
+              isPlayer={ false }
+            />
+          </div>
         </div>
         <div
           className="healthbar-content transition-opacity"
           style={{
             position: "absolute",
-            bottom: "5%",
+            top: "5%",
             left: "2%",
             zIndex: "5",
             opacity: visibility.healthBars ? "1" : "0"
           }}
         >
           <div
-            className="player-hud"
             style={{
-              display: "flex",
-              alignItems: "end"
+              width: "25dvw"
             }}
+            className="health-status-container"
           >
-            <HealthStatus
-              name={ `Trial: ${ round }` }
-              health={ playerHealth }
-              maxHealth={ playerMaxHealth }
-              isPlayer={ true }
-            />
-            <ApplyToken />
+            <div
+              className="player-hud"
+            >
+              <HealthBar
+                health={ playerHealth }
+                maxHealth={ playerMaxHealth }
+                isPlayer
+              />
+              { token !== null && 
+                <HoverBox
+                  name={ tokens[token].name }
+                  description={ tokens[token].effectDescription }
+                >
+                  <Token
+                    token={ tokens[token] }
+                  />
+                </HoverBox>
+              }
+          </div>
           </div>
         </div>
           <WagerBottle />
