@@ -36,7 +36,7 @@ export default function Table() {
             flexGrow: "1",
             justifyContent: "center",
             alignItems: "center",
-            height: "min(calc(65vw * 9/16), 65vh)",
+            height: "min(calc(60vw * 9/16), 60vh)",
             paddingBottom: "2vw"
           }}
         >

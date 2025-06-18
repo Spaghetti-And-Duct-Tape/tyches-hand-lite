@@ -275,8 +275,6 @@ function gameReducer(
       };
     
     case "DRAW_CARDS":
-      const playerTotal = action.payload.playerHand && cardTotal(action.payload.playerHand);
-
       return {
         ...state,
         ...(action.payload.playerHealth && { playerHealth: action.payload.playerHealth }),
@@ -286,7 +284,6 @@ function gameReducer(
         ...(action.payload.discardPile && { discardPile: action.payload.discardPile }),
         ...(action.payload.deck && { deck: action.payload.deck }),
         hand: playerHand.length === 0 ? hand + 1 : hand,
-        phase: playerTotal?.isBust ? "daimon-turn" : phase,
 
         animations: {
           ...animations,

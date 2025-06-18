@@ -73,7 +73,15 @@ export default function MenuScreens() {
               justifyContent: "center"
             }}
           >
-            Held together by: <a
+            Held together by:
+            <small
+              style={{
+                color: "transparent"
+              }}
+            >
+              -
+            </small>
+            <a
               href="https://github.com/Spaghetti-And-Duct-Tape/tyches-hand-lite"
             >
               Spaghetti and Duct Tape

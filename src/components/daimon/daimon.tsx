@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useGameState, type PhaseType } from "../../composables/useGameState";
 import "./daimon.css";
 import { daimons } from "../../daimons";

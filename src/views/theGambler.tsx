@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useGameState } from "../composables/useGameState"
 import Landscape from "./landscape";
+import ApplyToken from "../components/token/applyToken";
 
 export default function TheGambler() {
   const { gameState, gameDispatch } = useGameState();
@@ -23,6 +24,7 @@ export default function TheGambler() {
       }}
       className={ `player-${ animations.player }` }
     >
+      <ApplyToken />
       <Landscape />
     </div>
   )

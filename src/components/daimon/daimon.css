@@ -92,9 +92,9 @@
   background: radial-gradient(
     circle,
     black 0%,
-    #D4742A 50%,                      /* redder gold core */
-    rgba(255, 100, 50, 0.3) 75%,      /* warm reddish-orange aura */
-    rgba(0, 0, 0, 0) 100%             /* fade to transparent */
+    #D4742A 50%,
+    rgba(255, 100, 50, 0.3) 75%,
+    rgba(0, 0, 0, 0) 100%
   );
 }
 
@@ -104,9 +104,9 @@
   background: radial-gradient(
     circle,
     black 0%,
-    #74BFE2 50%,                        /* warm blue core with yellow lean */
-    rgba(180, 220, 255, 0.3) 75%,       /* soft blue-gold glow */
-    rgba(0, 0, 0, 0) 100%               /* fade to transparent */
+    #74BFE2 50%,
+    rgba(180, 220, 255, 0.3) 75%,
+    rgba(0, 0, 0, 0) 100%
   );
 }
 

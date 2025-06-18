@@ -1,85 +1,73 @@
 import { useState } from "react";
-import NumberTicker from "./numberTicker"
 import WoodenPanel from "../dialogue/woodenPanel";
+import NumberTicker from "./numberTicker";
 
-export default function HealthStatus({
-  name,
-  health, 
+export default function HealthBar({
+  health,
   maxHealth = 5000,
-  isPlayer = true,
+  isPlayer = true
 } : {
-  name: string;
   health: number;
   maxHealth?: number;
-  isPlayer: boolean;
+  isPlayer: boolean
 }) {
   const playerMaxHealth: number = maxHealth;
   const healthBarWidth: number = (health / playerMaxHealth) * 100;
-  const [healthValue, setHealthValue] = useState(health); 
+  const [healthValue, setHealthValue] = useState(health);
   const [maxHealthValue, setMaxHealthValue] = useState(maxHealth);
 
-  return(
-    <div className="health-status-container">
+  return (
+    <div
+      className="healthbar-container"
+    >
       <WoodenPanel>
-          <div
+        <div
+          style={{
+            position: "relative",
+          }}
+          className="healthbar-inner-layer"
+        >
+          <div 
             style={{
-              textAlign: "center",
-            }}  
-            className="heading-name">
-            <h2
+              position: "absolute",
+              width: "100%",
+              height: "100%"
+            }}
+          >
+            <div 
+              className={ `healthbar-fill ${ isPlayer && "player-health" }` }
               style={{
-                textAlign: "center",
-              }} 
-            >
-              { name }
-            </h2>
-          </div>
-        <div className="healthbar-container">
-          <WoodenPanel>
-            <div
-              style={{ 
-                position: "relative"
-              }} 
-              className="relative healthbar-inner-layer"
-            >
-              <div
+                width: `${ healthBarWidth }%`
+              }}
+            />
+            { isPlayer &&
+              <div 
+                className="healthbar-text"
                 style={{
                   position: "absolute",
                   width: "100%",
-                  height: "100%"
-                }} 
+                  textAlign: "end",
+                  top: "50%",
+                  left: "45%",
+                  fontSize: "15px"
+                }}
               >
-                <div className={ `healthbar-fill ${ isPlayer && "player-health" }` } style={{ width: `${ healthBarWidth }%` }} />
-                { isPlayer &&
-                  <div 
-                    className="healthbar-text"
-                    style={{
-                      position: "absolute",
-                      width: "100%",
-                      textAlign: "end",
-                      top: "50%",
-                      left: "45%",
-                      fontSize: "15px"
-                    }}
-                  >
-                    <NumberTicker
-                      replacement={ health }
-                      duration={ 1000 } 
-                      value={ healthValue } 
-                      setValue={ setHealthValue } 
-                    /> / <NumberTicker 
-                      replacement={ maxHealth }
-                      duration={ 1000 }
-                      value={ maxHealthValue }
-                      setValue={ setMaxHealthValue }
-                    />
-                  </div>
-                }
+                <NumberTicker
+                  replacement={ health }
+                  duration={ 1000 } 
+                  value={ healthValue } 
+                  setValue={ setHealthValue } 
+                /> / <NumberTicker 
+                  replacement={ maxHealth }
+                  duration={ 1000 }
+                  value={ maxHealthValue }
+                  setValue={ setMaxHealthValue }
+                />
               </div>
-            </div>
-          </WoodenPanel>
+            }
+          </div>
         </div>
       </WoodenPanel>
     </div>
   )
-};
+}

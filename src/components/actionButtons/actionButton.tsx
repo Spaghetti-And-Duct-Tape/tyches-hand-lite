@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useGameState, type PlayerActionsType } from "../../composables/useGameState"
 import BloodButton from "../bloodButton/bloodButton";
 import usePlayerActions from "../../composables/usePlayerActions";
+import { cardTotal } from "../../utils/cards";
 
 export default function ActionButton() {
   const { gameState, gameDispatch } = useGameState();
@@ -43,6 +44,7 @@ export default function ActionButton() {
 
     const actions: PlayerActionsType[] = ["Hit", "Stand"];
 
+    if (cardTotal(playerHand).isBust) return [];
     if (gameState.token === 1) actions.push("2x");
     if (playerHand.length > 2) return actions;
     

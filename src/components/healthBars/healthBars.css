@@ -114,25 +114,20 @@
 }
 
 .player-hud .token {
-  margin-left: -10%;
-  width: 10dvw;
-  height: 10dvw;
+  margin-left: 0.5dvw;
+  width: 2dvw;
+  height: 2dvw;
   z-index: -1;
 }
 
 .player-hud .token .rune {
-  font-size: 3dvw;
+  font-size: 0.5dvw;
 }
 
-.player-hud .player-attacked .token {
-  --glow-color: rgba(212, 233, 61, 0.3);
-  animation: box-transition 1s ease-out;
+.positive-color {
+  color: #70A770;
 }
 
-.player-hud .player-injured {
-  animation: none;
-}
-
-.player-hud .player-healed {
-  animation: none;
+.negative-color {
+  color: #A87272;
 }

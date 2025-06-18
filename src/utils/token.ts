@@ -27,7 +27,7 @@ export const tokens: TokenType[] = [{
     }};
     if (gs.phase === "player-turn") {
       return {
-        daimonHealth: gs.daimonHealth - 0.4 * (gs.daimonMaxHealth -gs.daimonHealth),
+        daimonHealth: Math.floor(gs.daimonHealth - 0.4 * (gs.daimonMaxHealth -gs.daimonHealth)),
         animations: {
           ...gs.animations,
           daimon: "injured"

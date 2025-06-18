@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useGameState } from "../../composables/useGameState"
 import { cardTotal, emptyCard } from "../../utils/cards";
 import { effectCardDelay, standardCardDelay, wait } from "../../utils/utils";
@@ -88,7 +88,7 @@ export default function HandleCards() {
       <div
         style={{
           display: "flex",
-          height: "35%"
+          height: "37%"
         }}
       >
         <PerspectiveCards
@@ -103,7 +103,7 @@ export default function HandleCards() {
       <div
         style={{
           display: "flex",
-          height: "35%"
+          height: "37%"
         }}
       >
         <PerspectiveCards

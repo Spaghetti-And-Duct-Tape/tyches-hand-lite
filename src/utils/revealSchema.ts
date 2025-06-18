@@ -11,15 +11,15 @@ export function revealSchema(round: number) {
       return {
         dialogueBox: 0,
         daimon: 5,
-        table: 1,
-        healthBars: 1
+        table: 5,
+        healthBars: 5
       }
     default:
       return {
         dialogueBox: 0,
         daimon: 1,
         table: 1,
-        healthBars: 1
+        healthBars: 999
       };
   }
 };
