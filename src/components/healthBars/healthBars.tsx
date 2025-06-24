@@ -35,59 +35,51 @@ export default function HealthBars() {
           className="healthbar-content transition-opacity"
           style={{
             position: "absolute",
-            bottom: "5%",
-            left: "50%",
+            top: "5%",
+            right: "2%",
             zIndex: "5",
-            transform: "translateX(-50%)",
             opacity: visibility.healthBars ? "1" : "0"
           }}
         >
           <div
             style={{
-              width: "50dvw"
+              width: "25dvw"
             }} 
             className="health-status-container"
           >
-            <div
+            <h2
+              className="boss-name"
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "end"
+                margin: "0"
               }}
             >
-              <h2
-                className="boss-name"
-                style={{
-                  margin: "0"
-                }}
-              >
-                { daimons[daimon].name }
-              </h2>
-              { daimonHealthChange !== 0 &&
-                <p
-                  className={ `transition-opacity daimon-damage ${ daimonHealthChange > 0 ? "" : "negative-color" }` }
-                  style={{
-                    margin: "0",
-                    opacity: daimonHealthChange === 0 ? "0" : "1",
-                    maxHeight: "fit-content"
-                  }}
-                >
-                  { daimonHealthChange }
-                </p>
-              }
-            </div>
+              { daimons[daimon].name }
+            </h2>
             <HealthBar
               health={ daimonHealth }
               maxHealth={ daimonMaxHealth }
               isPlayer={ false }
             />
+            { daimonHealthChange !== 0 &&
+              <p
+                className={ `transition-opacity daimon-damage ${ daimonHealthChange > 0 ? "" : "negative-color" }` }
+                style={{
+                  margin: "0",
+                  textAlign: "center",
+                  opacity: daimonHealthChange === 0 ? "0" : "1",
+                  maxHeight: "fit-content"
+                }}
+              >
+                { daimonHealthChange }
+              </p>
+            }
           </div>
         </div>
         <div
           className="healthbar-content transition-opacity"
           style={{
             position: "absolute",
-            top: "5%",
+            bottom: "5%",
             left: "2%",
             zIndex: "5",
             opacity: visibility.healthBars ? "1" : "0"
