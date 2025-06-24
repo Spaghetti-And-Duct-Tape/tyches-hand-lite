@@ -94,11 +94,6 @@ export default function HealthBars() {
             <div
               className="player-hud"
             >
-              <HealthBar
-                health={ playerHealth }
-                maxHealth={ playerMaxHealth }
-                isPlayer
-              />
               { token !== null && 
                 <HoverBox
                   name={ tokens[token].name }
@@ -109,6 +104,11 @@ export default function HealthBars() {
                   />
                 </HoverBox>
               }
+              <HealthBar
+                health={ playerHealth }
+                maxHealth={ playerMaxHealth }
+                isPlayer
+              />
           </div>
           </div>
         </div>
