@@ -214,8 +214,6 @@ export default function usePlayerActions() {
     };
     
     await wait(postEffectDelay);
-    
-   
   };
 
   async function resolveHand() {

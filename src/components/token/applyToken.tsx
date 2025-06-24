@@ -46,8 +46,6 @@ export default function ApplyToken() {
 
     if (newGameState.daimonHealth !== undefined && newGameState?.daimonHealth <= 0) return endRound();
 
-    newGameState.phase = phase;
-
     gameDispatch({ type: "APPLY_EFFECTS",
       payload: {
         gameState: newGameState

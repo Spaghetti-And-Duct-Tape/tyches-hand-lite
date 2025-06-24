@@ -22,11 +22,13 @@ export const tokens: TokenType[] = [{
     if (gs.phase === "intro-dialogue" && gs.hand === 0) {
       const playerMaxHealth = gs.playerMaxHealth * 0.6;
       return {
+        phase: "intro-dialogue",
         playerHealth: calculateHealth(gs.playerHealth, playerMaxHealth),
         playerMaxHealth
     }};
     if (gs.phase === "player-turn") {
       return {
+        phase: "player-turn",
         daimonHealth: Math.floor(gs.daimonHealth - 0.4 * (gs.daimonMaxHealth -gs.daimonHealth)),
         animations: {
           ...gs.animations,
@@ -44,12 +46,16 @@ export const tokens: TokenType[] = [{
   effectDescription: "Grants the freedom to double-down in all situations, and refunds blood pool from total wager",
   gameState: (gs: GameStateType) => {
     if (gs.phase === "player-turn") {
-      if (gs.playerHand.length > 2) return { playerActions: [] }
+      if (gs.playerHand.length > 2) return { 
+        phase: "player-turn",
+        playerActions: [] 
+      }
     }
 
     if (gs.phase === "apply-token-effect") {
       const qrtWager = Math.floor(gs.wager / 4)
       return {
+        phase: "apply-token-effect",
         playerHealth: calculateHealth(gs.playerHealth, gs.playerMaxHealth, qrtWager),
         wager: gs.wager - qrtWager
       }
@@ -70,7 +76,10 @@ export const tokens: TokenType[] = [{
       });
 
       const deck = randomCardPicker(gs.deck, weights, 52)
-      return { deck: deck }
+      return {
+        phase: "intro-dialogue", 
+        deck: deck
+      }
     }
 
     if (gs.phase === "apply-token-effect") {
@@ -81,7 +90,12 @@ export const tokens: TokenType[] = [{
       const partialBloodstainedDamge = Math.floor(0.5 * totalBloodstainedDamage);
       
       if (partialBloodstainedDamge < 0) return {
-        daimonHealth: calculateHealth(gs.daimonHealth, gs.daimonMaxHealth, partialBloodstainedDamge)
+        phase: "apply-token-effect",
+        daimonHealth: calculateHealth(gs.daimonHealth, gs.daimonMaxHealth, partialBloodstainedDamge),
+        animations: {
+          ...gs.animations,
+          daimon: "injured"
+        }
       };
     };
   },
@@ -101,7 +115,10 @@ export const tokens: TokenType[] = [{
 
       const deck = randomCardPicker(gs.deck, weights, 52)
      
-      return { deck: deck }
+      return { 
+        phase: "intro-dialogue",
+        deck: deck 
+      }
     };
 
     if (gs.phase === "apply-token-effect") {
@@ -112,6 +129,7 @@ export const tokens: TokenType[] = [{
       const partialCharredHeal = Math.floor(0.5 * totalCharredHeal)
       
       if (partialCharredHeal > 0) return {
+        phase: "apply-token-effect",
         playerHealth: calculateHealth(gs.playerHealth, gs.playerMaxHealth, partialCharredHeal)
       };
     };
@@ -126,6 +144,7 @@ export const tokens: TokenType[] = [{
   gameState: (gs: GameStateType) => {
     if (gs.phase === "player-turn") {
       return {
+        phase: "player-turn",
         playerHealth: gs.playerHealth + 150,
         playerMaxHealth: gs.playerMaxHealth + 100
       }
@@ -149,16 +168,20 @@ export const tokens: TokenType[] = [{
 
       const deck = randomCardPicker(gs.deck, weights, 52)
       
-      return { deck: deck }
+      return {
+        phase: "intro-dialogue", 
+        deck: deck 
+      }
     };
 
-    if (gs.phase === "daimon-turn") {
+    if (gs.phase === "apply-token-effect") {
       const lastCard = gs.playerHand[gs.playerHand.length - 1];
       const lastCardBust = typeof lastCard.rank === "number" 
         && lastCard.rank < 7 
         && cardTotal(gs.playerHand).isBust;
 
       if (lastCardBust) return {
+        phase: "daimon-turn",
         playerHand: gs.playerHand.slice(0, -1),
         deck: [lastCard, ...gs.deck]
       };
@@ -182,13 +205,17 @@ export const tokens: TokenType[] = [{
 
       const deck = randomCardPicker(gs.deck, weights, 52)
     
-      return { deck: deck }
+      return {
+        phase: "intro-dialogue", 
+        deck: deck 
+      }
     };
 
     if (gs.phase === "apply-token-effect") {
       const isBlackjack = cardTotal(gs.playerHand).isBlackjack;
       
       if (isBlackjack) return {
+        phase: "apply-token-effect",
         wager: Math.floor(gs.wager * 1.5)
       };
     };

@@ -38,7 +38,7 @@ export default function HandleCards() {
     const transitionPhase = daimonHand.length === 1;
     
     const lastCardEffect = playerHand[playerHand.length - 1]?.effect ?? "Standard";
-    const delay = lastCardEffect === "Standard" ? standardCardDelay : effectCardDelay;
+    const delay = lastCardEffect === "Standard" ? standardCardDelay : effectCardDelay * 1.5;
     
     if (isFirstCard) {
       drawPlayerCard();

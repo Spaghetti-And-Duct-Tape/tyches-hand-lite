@@ -170,7 +170,6 @@ function gameReducer(
   action: GameActionType,
 ): GameStateType {
   const { 
-    phase,
     round,
     hand,
     playerHealth,
