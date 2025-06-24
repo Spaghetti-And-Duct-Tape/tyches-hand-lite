@@ -131,3 +131,8 @@
 .negative-color {
   color: #A87272;
 }
+
+.player-hud .hover-box {
+  bottom: 0;
+  left: 100%;
+}
