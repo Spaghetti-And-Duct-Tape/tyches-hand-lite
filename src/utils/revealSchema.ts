@@ -19,7 +19,7 @@ export function revealSchema(round: number) {
         dialogueBox: 0,
         daimon: 1,
         table: 1,
-        healthBars: 999
+        healthBars: 2
       };
   }
 };
