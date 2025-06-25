@@ -153,6 +153,10 @@
   animation: blinkingLid 1s;
 }
 
+.tyches-wrath {
+  animation: blink 1s;
+}
+
 .tyches-wrath #eye {
   background: radial-gradient(
     ellipse at 20% 20%,
