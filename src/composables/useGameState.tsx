@@ -86,7 +86,7 @@ const initialGameState: GameStateType = {phase: "intro-dialogue",
   daimonHand: [],
   deck: tutorialDeck,
   discardPile: [],
-  token: 2,
+  token: null,
   visibility: {
     daimon: false,
     table: false,
