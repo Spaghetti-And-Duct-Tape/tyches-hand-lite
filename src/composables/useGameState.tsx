@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import { cardTotal, shuffleCards, tutorialDeck, type CardType } from "../utils/cards";
+import { shuffleCards, tutorialDeck, type CardType } from "../utils/cards";
 import { calculateDaimonHealth, calculateHealth, wait } from "../utils/utils";
 
 export type PhaseType = 
@@ -86,7 +86,7 @@ const initialGameState: GameStateType = {phase: "intro-dialogue",
   daimonHand: [],
   deck: tutorialDeck,
   discardPile: [],
-  token: null,
+  token: 2,
   visibility: {
     daimon: false,
     table: false,

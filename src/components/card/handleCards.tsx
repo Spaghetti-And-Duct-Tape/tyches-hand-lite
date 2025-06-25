@@ -11,6 +11,7 @@ export default function HandleCards() {
   const { phase, playerHand, daimonHand } = gameState;
   const { drawPlayerCard, drawDaimonCard } = usePlayerActions();
   const handleDaimonHand = daimonHand.length === 1 ? [...daimonHand, emptyCard] : daimonHand;
+  
   useEffect(() => {
     if (phase !== "draw") return;
     handleDrawPhase();
@@ -66,6 +67,8 @@ export default function HandleCards() {
       await wait(delay);
       return drawDaimonCard();
     };
+
+    await wait(1000);
 
     gameDispatch({ type: "SET_PHASE",
       payload: {

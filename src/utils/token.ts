@@ -48,7 +48,7 @@ export const tokens: TokenType[] = [{
     if (gs.phase === "player-turn") {
       if (gs.playerHand.length > 2) return { 
         phase: "player-turn",
-        playerActions: [] 
+        playerActions: []
       }
     }
 
@@ -57,7 +57,11 @@ export const tokens: TokenType[] = [{
       return {
         phase: "apply-token-effect",
         playerHealth: calculateHealth(gs.playerHealth, gs.playerMaxHealth, qrtWager),
-        wager: gs.wager - qrtWager
+        wager: gs.wager - qrtWager,
+        animations: {
+          ...gs.animations,
+          player: "healed"
+        }
       }
     }
   },
@@ -87,7 +91,7 @@ export const tokens: TokenType[] = [{
         .filter(card => card.effect === "Bloodstained")
         .reduce((sum, card) => sum + card.value, 0);
       
-      const partialBloodstainedDamge = Math.floor(0.5 * totalBloodstainedDamage);
+      const partialBloodstainedDamge = Math.floor(0.75 * totalBloodstainedDamage);
       
       if (partialBloodstainedDamge < 0) return {
         phase: "apply-token-effect",
@@ -126,11 +130,15 @@ export const tokens: TokenType[] = [{
         .filter(card => card.effect === "Charred")
         .reduce((sum, card) => sum + card.value, 0);
 
-      const partialCharredHeal = Math.floor(0.5 * totalCharredHeal)
+      const partialCharredHeal = Math.floor(0.75 * totalCharredHeal)
       
       if (partialCharredHeal > 0) return {
         phase: "apply-token-effect",
-        playerHealth: calculateHealth(gs.playerHealth, gs.playerMaxHealth, partialCharredHeal)
+        playerHealth: calculateHealth(gs.playerHealth, gs.playerMaxHealth, partialCharredHeal),
+        animations: {
+          ...gs.animations,
+          player: "healed"
+        }
       };
     };
   },
@@ -146,7 +154,11 @@ export const tokens: TokenType[] = [{
       return {
         phase: "player-turn",
         playerHealth: gs.playerHealth + 150,
-        playerMaxHealth: gs.playerMaxHealth + 100
+        playerMaxHealth: gs.playerMaxHealth + 100,
+        animations: {
+          ...gs.animations,
+          player: "healed"
+        }
       }
     };
   },

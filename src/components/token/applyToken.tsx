@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useGameState } from "../../composables/useGameState"
 import { tokens } from "../../utils/token";
 import Token from "./token";
+import { wait } from "../../utils/utils";
 
 export default function ApplyToken() {
   const { gameState, gameDispatch, setAnimation, endRound } = useGameState();
@@ -46,9 +47,35 @@ export default function ApplyToken() {
 
     if (newGameState.daimonHealth !== undefined && newGameState?.daimonHealth <= 0) return endRound();
 
+    const newPhase = newGameState.phase;
+    newGameState.phase = "apply-effect";
+
     gameDispatch({ type: "APPLY_EFFECTS",
       payload: {
         gameState: newGameState
+    }});
+
+    if (newGameState.animations) {
+      await wait(1200);
+      
+      gameDispatch({ type: "SET_ANIMATION", 
+        payload: {
+          target: "player",
+          animation: "idle"
+        }
+      });
+      
+      gameDispatch({ type: "SET_ANIMATION", 
+        payload: {
+          target: "daimon",
+          animation: "idle"
+        }
+      });
+    };
+
+    gameDispatch({ type: "SET_PHASE", 
+      payload: {
+        phase: newPhase
     }});
   };
 
