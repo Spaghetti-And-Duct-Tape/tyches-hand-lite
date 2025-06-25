@@ -50,7 +50,8 @@ export default function HealthBars() {
             <h2
               className="boss-name"
               style={{
-                margin: "0"
+                margin: "0",
+                textAlign: "center"
               }}
             >
               { daimons[daimon].name }
